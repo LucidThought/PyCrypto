@@ -78,12 +78,12 @@ def startClientNone():
   ipDEST = DEST[0:separator]
   sockDEST = DEST[separator+1:]
   clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-  clientSocket.connect((int(ipDEST),str(sockDEST))
-  #print(COMMAND)
-  #if(COMMAND=="read"):
-  #  print("READ")  
-  #if(COMMAND=='write'):
-  #  clientSocket.send("none")
+  clientSocket.connect((ipDEST,int(sockDEST)))
+  print(COMMAND)
+  if(COMMAND=="read"):
+    print("READ")  
+  if(COMMAND=='write'):
+    clientSocket.send("none")
 #    clientSocket.send(FILE)      
 #  else:
 #    print("I don't know how to " + COMMAND)
