@@ -15,6 +15,8 @@ def start():
   SERVER_PORT = int(sys.argv[1])
   SERVER_HOST = 'localhost' # server host
   start_file_server()
+  #python3 client.py <read> <filename> host:port none
+  #cat file1.txt | ./client write f1.txt localhost:9999 none
 
 def start_file_server():
   server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

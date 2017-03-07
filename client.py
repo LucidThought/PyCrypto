@@ -47,7 +47,7 @@ def main():
   if (sys.argv[4]=='none'):
     COMMAND = str(sys.argv[1])
     FILENAME = str(sys.argv[2])
-    DEST = str(argv[3])
+    DEST = str(sys.argv[3])
     CIPHER = 'none' 	
   else:
     if(len(sys.argv)==5):
@@ -78,17 +78,18 @@ def startClientNone():
   ipDEST = DEST[0:separator]
   sockDEST = DEST[separator+1:]
   clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-  clientSocket.bind(ipDEST,sockDEST)
-  if(COMMAND=='read'):
-    print("READ")  
-  elif(COMMAND=='write'):
-    clientSocket.send("none")
+  clientSocket.connect((int(ipDEST),str(sockDEST))
+  #print(COMMAND)
+  #if(COMMAND=="read"):
+  #  print("READ")  
+  #if(COMMAND=='write'):
+  #  clientSocket.send("none")
 #    clientSocket.send(FILE)      
 #  else:
 #    print("I don't know how to " + COMMAND)
 
 
-if(__name__ == "__main__"):
+if __name__ == '__main__':
   print("Start")
 #  print(str(hashlib.sha256(str_to_bytes("test")).digest()))
 #  print(str(Random.new().read(AES.block_size)))
