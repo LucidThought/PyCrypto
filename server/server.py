@@ -2,6 +2,7 @@
 import socket
 import getopt
 import sys
+from threading import Thread
 
 LISTEN = True
 SERVER_HOST = ''
@@ -35,13 +36,30 @@ def start_file_server():
 
 def client_connect(clientSock,client_ip,client_port):
   
-  print("welcome to the worlds most reliable file server (99.99% up time)")  
+  print("welcome to the worlds most reliable file server (99.99% up time)")
 
   while True:
+
     client_request = get_data(clientSock)
-    
+
     if len(client_request) > 0:
-      print("data recieved")
+
+        print("data recieved")
+        # extract the header by splitting on delimiter
+        array = client_request.split(b". .")
+        header_bytes = array[0]
+        array1 = header_bytes.split(b"\n")
+        print(array1[0])
+        file_bytes = array[1]
+        print(str(header_bytes,'utf-8'))
+        print(len(array))
+        #print(file_bytes)
+        file_name = "gotpic.jpg"
+        outFile = open(file_name,"wb")
+        outFile.write(file_bytes)
+        outFile.close()
+        
+            
     if not len(client_request):
       clientSock.close()
       break
@@ -67,3 +85,8 @@ def get_data(socket):
 
 if __name__ == "__main__":
   start()
+
+
+
+
+

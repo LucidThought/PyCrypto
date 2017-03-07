@@ -9,8 +9,10 @@ import time
 import socket
 import os
 
-from Crypto import Random
-from Crypto.Cipher import AES
+
+
+#from Crypto import Random
+#from Crypto.Cipher import AES
 
 COMMAND = ''
 FILENAME = ''
@@ -33,7 +35,7 @@ def main():
   global FILENAME
   global DEST
   global CIPHER
-  global KEY
+  global KEY 
   global PW
   global FILE
   print("Main")
@@ -80,11 +82,19 @@ def startClientNone():
   clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   clientSocket.connect((ipDEST,int(sockDEST)))
   print(COMMAND)
+
   if(COMMAND=="read"):
     print("READ")  
+
   if(COMMAND=='write'):
-    clientSocket.send("none")
-#    clientSocket.send(FILE)      
+    
+    ## Construct a header to go with the payload
+    encryption_mode = b"none"
+    server_command = b"write"
+    delimiter = b". ."
+    header = server_command + encryption_mode + delimiter
+    clientSocket.send( header + FILE )  
+
   else:
     print("I don't know how to " + COMMAND)
 
