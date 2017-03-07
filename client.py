@@ -85,8 +85,8 @@ def startClientNone():
   if(COMMAND=='write'):
     clientSocket.send("none")
 #    clientSocket.send(FILE)      
-#  else:
-#    print("I don't know how to " + COMMAND)
+  else:
+    print("I don't know how to " + COMMAND)
 
 
 if __name__ == '__main__':
