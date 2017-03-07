@@ -39,8 +39,8 @@ def main():
   print("Main")
 #  print(hashlib.sha256(str_to_bytes("test")).hexdigest())  # This gives a 32-byte key value
 #  print(hashlib.md5("test".encode()).hexdigest()) # This gives a 16-byte key value
-  rand = os.urandom(32)
-  print(hashlib.md5(rand).hexdigest()) # Randomly generate 16-byte key
+#  rand = os.urandom(32)
+#  print(hashlib.md5(rand).hexdigest()) # Randomly generate 16-byte key
 #  print(os.urandom(32)) # Randomly generate 32-byte key 
   print(Random.new().read(AES.block_size))
 
