@@ -83,7 +83,7 @@ def startClientNone():
     print("READ")  
   elif(COMMAND=='write'):
     clientSocket.send("none")
-#  clientSocket.send(FILE)      
+#    clientSocket.send(FILE)      
 #  else:
 #    print("I don't know how to " + COMMAND)
 
