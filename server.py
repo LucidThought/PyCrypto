@@ -33,6 +33,8 @@ def start_file_server():
 
 def client_connect(clientSock,client_ip,client_port):
   
+  print("welcome to the worlds most reliable file server (99.99% up time)")  
+
   while True:
     client_request = get_data(clientSock)
     
