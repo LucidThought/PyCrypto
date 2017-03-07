@@ -42,7 +42,7 @@ def main():
 #  rand = os.urandom(32)
 #  print(hashlib.md5(rand).hexdigest()) # Randomly generate 16-byte key
 #  print(os.urandom(32)) # Randomly generate 32-byte key 
-  print(Random.new().read(AES.block_size))
+#  print(Random.new().read(AES.block_size))
 
   if (sys.argv[4]=='none'):
     COMMAND = str(sys.argv[1])
@@ -57,7 +57,7 @@ def main():
       CIPHER = str(argv[4])
       PW = str(argv[5])
       print("Password: " + PW)
-      KEY = hashlib.sha256(str_to_bytes(PW)).digest()
+      KEY = hashlib.sha256(str_to_bytes(PW)).hexdigest()
     elif(len(sys.argv)==4):
       COMMAND = str(sys.argv[1])
       FILENAME = str(sys.argv[2])
@@ -70,7 +70,7 @@ def str_to_bytes(data):
     return data.encode('utf-8')
   return data
 
-def startClient(destAddr):
+def startClientNone():
   global COMMAND
   global DEST
   global FILE
@@ -79,10 +79,11 @@ def startClient(destAddr):
   sockDEST = DEST[separator+1:]
   clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   clientSocket.bind(ipDEST,sockDEST)
-#  if(COMMAND=='read'):
-    
-#  elif(COMMAND=='write'):
-        
+  if(COMMAND=='read'):
+    print("READ")  
+  elif(COMMAND=='write'):
+    clientSocket.send("none")
+#  clientSocket.send(FILE)      
 #  else:
 #    print("I don't know how to " + COMMAND)
 
@@ -92,3 +93,4 @@ if(__name__ == "__main__"):
 #  print(str(hashlib.sha256(str_to_bytes("test")).digest()))
 #  print(str(Random.new().read(AES.block_size)))
   main()
+  startClientNone()
