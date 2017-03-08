@@ -38,13 +38,11 @@ def client_connect(clientSock,client_ip,client_port):
   
   while True:
     
-    print("debug")
     client_request = get_data(clientSock)
     if len(client_request) > 0:
        
       #Split on delimiter works, i.e. client in write mode with payload
       try:
-        print("debugx")
         array = client_request.split(b". .")
         header_bytes = array[0]              #extract header
         payload_bytes = array[1]             #extract file_payload
@@ -56,7 +54,6 @@ def client_connect(clientSock,client_ip,client_port):
       
       # Cannot split on delimiter, i.e. client is in read mode with no payload  
       except:
-        print("debugx") 
         header_array = header_bytes.split(b"\n")
         command = (header_array[0]).decode(encoding='UTF-8')
         file_name = (header_array[1]).decode(encoding='UTF-8')
@@ -71,7 +68,10 @@ def client_connect(clientSock,client_ip,client_port):
       
       # client wants to download a specified file
       elif command == "read":
-        downloadMode(file_name,cipher,payload_bytes)
+        payload,size = downloadMode(file_name,cipher)
+        clientSock.send(bytes(payload))
+        print("sending: "+ file_name + " |Size: "+str(size)+" bytes")
+
       else:
         print( "command: "+command+ " not a valid command" )
 
@@ -86,6 +86,19 @@ def uploadMode(file_name,cipher,payload_bytes):
     getFile(file_name,payload_bytes)
   if cipher == "aes-128":
     print("aes-128 not implemented")
+
+def downloadMode(file_name,cipher):
+
+   print("server is in download mode")
+   print(file_name)
+   try:
+     inFile = open(file_name,'rb')
+     payload = inFile.read()
+     size = len(payload)
+     return payload,size
+
+   except:
+     print("file doesn't exist")
 
 def getFile(file_name,payload_bytes):
   

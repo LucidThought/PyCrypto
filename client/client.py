@@ -50,6 +50,7 @@ def main():
     FILENAME = str(sys.argv[2])
     DEST = str(sys.argv[3])
     CIPHER = 'none'
+
     if COMMAND == "write":
       FILE = sys.stdin.buffer.read()
 
@@ -62,6 +63,7 @@ def main():
       PW = str(argv[5])
       print("Password: " + PW)
       KEY = hashlib.sha256(str_to_bytes(PW)).hexdigest()
+
       if COMMAND == "write":
         FILE = sys.stdin.buffer.read()
 
@@ -70,9 +72,10 @@ def main():
       FILENAME = str(sys.argv[2])
       DEST = str(argv[3])
       CIPHER = 'none'
+
       if COMMAND == "write":
         FILE = sys.stdin.buffer.read()
-  
+    
 def str_to_bytes(data):
   utype = type(b''.decode('utf-8'))
   if isinstance(data, utype):
@@ -91,12 +94,12 @@ def startClientNone():
   print(COMMAND)
 
   if(COMMAND=="read"):
-    print("READ")  
     
+    #send just the header 
     header = createHeader(COMMAND,FILENAME,CIPHER)
-    clientSock.send( header )    
+    clientSocket.send( header )   
  
-  if(COMMAND=='write'):
+  elif(COMMAND=='write'):
     
     #send header + payload
     header = createHeader(COMMAND,FILENAME,CIPHER)
