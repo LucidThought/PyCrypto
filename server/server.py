@@ -37,12 +37,14 @@ def start_file_server():
 def client_connect(clientSock,client_ip,client_port):
   
   while True:
-
+    
+    print("debug")
     client_request = get_data(clientSock)
     if len(client_request) > 0:
        
       #Split on delimiter works, i.e. client in write mode with payload
       try:
+        print("debugx")
         array = client_request.split(b". .")
         header_bytes = array[0]              #extract header
         payload_bytes = array[1]             #extract file_payload
@@ -53,18 +55,21 @@ def client_connect(clientSock,client_ip,client_port):
         cipher = (header_array[2]).decode(encoding='UTF-8')     
       
       # Cannot split on delimiter, i.e. client is in read mode with no payload  
-      except: 
+      except:
+        print("debugx") 
         header_array = header_bytes.split(b"\n")
         command = (header_array[0]).decode(encoding='UTF-8')
         file_name = (header_array[1]).decode(encoding='UTF-8')
         cipher = (header_array[2]).decode(encoding='UTF-8') 
-     
+      
+      # client wants to upload specified file
       if command == "write":
         uploadMode(file_name,cipher,payload_bytes)
         print(file_name+" uploaded to server from: " + client_ip)
         message = "uploaded file to server: " + file_name
         clientSock.send(bytes(message,"UTF-8"))
-
+      
+      # client wants to download a specified file
       elif command == "read":
         downloadMode(file_name,cipher,payload_bytes)
       else:

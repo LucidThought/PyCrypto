@@ -20,8 +20,7 @@ DEST = ''
 CIPHER = ''
 KEY = ''
 PW = ''
-FILE = sys.stdin.buffer.read()
-
+FILE = b''
 
 # The following command read stdin as a bytestream:
 # inBytes = sys.stdin.buffer.read()
@@ -46,11 +45,15 @@ def main():
 #  print(os.urandom(32)) # Randomly generate 32-byte key 
 #  print(Random.new().read(AES.block_size))
 
+  # fixed BUG HERE --> CALLING FILE = sys.stdin.buffer.read() can't be called in global during read mode
   if (sys.argv[4]=='none'):
     COMMAND = str(sys.argv[1])
     FILENAME = str(sys.argv[2])
     DEST = str(sys.argv[3])
-    CIPHER = 'none' 	
+    CIPHER = 'none'
+    if COMMAND == "write":
+      FILE = sys.stdin.buffer.read()
+
   else:
     if(len(sys.argv)==5):
       COMMAND = str(sys.argv[1])
@@ -60,11 +63,16 @@ def main():
       PW = str(argv[5])
       print("Password: " + PW)
       KEY = hashlib.sha256(str_to_bytes(PW)).hexdigest()
+      if COMMAND == "write":
+        FILE = sys.stdin.buffer.read()
+
     elif(len(sys.argv)==4):
       COMMAND = str(sys.argv[1])
       FILENAME = str(sys.argv[2])
       DEST = str(argv[3])
       CIPHER = 'none'
+      if COMMAND == "write":
+        FILE = sys.stdin.buffer.read()
   
 def str_to_bytes(data):
   utype = type(b''.decode('utf-8'))
@@ -85,12 +93,17 @@ def startClientNone():
 
   if(COMMAND=="read"):
     print("READ")  
-
+    
+    header = createHeader(COMMAND,FILENAME,CIPHER)
+    clientSock.send( header )    
+ 
   if(COMMAND=='write'):
     
     #send header + payload
+    print("debugx")
     header = createHeader(COMMAND,FILENAME,CIPHER)
-    clientSocket.send( header + FILE)  
+    clientSocket.send( header + FILE)
+    print("debugxx")  
 
   else:
     print("I don't know how to " + COMMAND)
@@ -106,4 +119,5 @@ if __name__ == '__main__':
 #  print(str(hashlib.sha256(str_to_bytes("test")).digest()))
 #  print(str(Random.new().read(AES.block_size)))
   main()
+  print("debug1")
   startClientNone()
