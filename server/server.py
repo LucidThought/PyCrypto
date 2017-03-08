@@ -36,38 +36,54 @@ def start_file_server():
 
 def client_connect(clientSock,client_ip,client_port):
   
-  print("welcome to the worlds most reliable file server (99.99% up time)")
-
   while True:
 
     client_request = get_data(clientSock)
     if len(client_request) > 0:
        
+      #Split on delimiter works, i.e. client in write mode with payload
       try:
         array = client_request.split(b". .")
         header_bytes = array[0]              #extract header
         payload_bytes = array[1]             #extract file_payload
         header_array = header_bytes.split(b"\n")
-
-        mode = (header_array[0]).decode(encoding='UTF-8')
+		
+        command = (header_array[0]).decode(encoding='UTF-8')
         file_name = (header_array[1]).decode(encoding='UTF-8')
-        cipher = (header_array[2]).decode(encoding='UTF-8')
-        
+        cipher = (header_array[2]).decode(encoding='UTF-8')     
+      
+      # Cannot split on delimiter, i.e. client is in read mode with no payload  
       except: 
-        print("cannot split on delmiter")
+        header_array = header_bytes.split(b"\n")
+        command = (header_array[0]).decode(encoding='UTF-8')
+        file_name = (header_array[1]).decode(encoding='UTF-8')
+        cipher = (header_array[2]).decode(encoding='UTF-8') 
      
-      if cipher == "none":
-          getFileNoEncryption(file_name,payload_bytes)
-      if cipher == "aes-128":
-        print("aes-128 not implemented")
-            
+      if command == "write":
+        uploadMode(file_name,cipher,payload_bytes)
+        print(file_name+" uploaded to server from: " + client_ip)
+        message = "uploaded file to server: " + file_name
+        clientSock.send(bytes(message,"UTF-8"))
+
+      elif command == "read":
+        downloadMode(file_name,cipher,payload_bytes)
+      else:
+        print( "command: "+command+ " not a valid command" )
+
+    # No more data to recieve, close the client socket
     if not len(client_request):
       clientSock.close()
       break
 
-def getFileNoEncryption(file_name,payload_bytes):
+def uploadMode(file_name,cipher,payload_bytes):
 
-  print("uploading file to server: " + file_name)
+  if cipher == "none":
+    getFile(file_name,payload_bytes)
+  if cipher == "aes-128":
+    print("aes-128 not implemented")
+
+def getFile(file_name,payload_bytes):
+  
   outFile = open(file_name,"wb")
   outFile.write(payload_bytes)
   outFile.close()

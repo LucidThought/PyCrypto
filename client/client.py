@@ -88,14 +88,13 @@ def startClientNone():
 
   if(COMMAND=='write'):
     
-    
+    #send header + payload
     header = createHeader(COMMAND,FILENAME,CIPHER)
     clientSocket.send( header + FILE)  
 
   else:
     print("I don't know how to " + COMMAND)
 
-## Construct a header to go with the payload (file byte string)
 def createHeader(COMMAND,CIPHER,FILENAME):
 
   delimiter = ". ."
