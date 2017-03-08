@@ -93,6 +93,8 @@ def downloadMode(file_name,cipher):
    print("server is in download mode")
    print(file_name)
    try:
+# This might have to be a call to io.FileIO(name,mode='r'), which will return bytes data representing the file
+# There are other io functions that might accomplish this in a simpler way for bytestream data transfer across the network interface
      inFile = open(file_name,'rb')
      payload = inFile.read()
      size = len(payload)
