@@ -112,7 +112,7 @@ def startClientNone():
       #if len(server_request) > 0:
         # NOT recieving data for some reason, it's definately sending from server
         #print(server_request)
-      print(payload)
+      sys.stdout.buffer.write(payload)
       size = len(payload)
       #print("Recieved: "+ FILENAME + " |Size: "+str(size)+" bytes")    
       #if not len(server_request):
