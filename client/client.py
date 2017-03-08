@@ -88,16 +88,19 @@ def startClientNone():
 
   if(COMMAND=='write'):
     
-    ## Construct a header to go with the payload
-    encryption_mode = b"none"
-    server_command = b"write"
-    delimiter = b". ."
-    header = server_command + encryption_mode + delimiter
-    clientSocket.send( header + FILE )  
+    
+    header = createHeader(COMMAND,FILENAME,CIPHER)
+    clientSocket.send( header + FILE)  
 
   else:
     print("I don't know how to " + COMMAND)
 
+## Construct a header to go with the payload (file byte string)
+def createHeader(COMMAND,CIPHER,FILENAME):
+
+  delimiter = ". ."
+  header = bytes(COMMAND+"\n"+CIPHER+"\n"+FILENAME+delimiter,"UTF-8")
+  return header
 
 if __name__ == '__main__':
   print("Start")

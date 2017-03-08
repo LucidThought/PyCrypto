@@ -41,28 +41,36 @@ def client_connect(clientSock,client_ip,client_port):
   while True:
 
     client_request = get_data(clientSock)
-
     if len(client_request) > 0:
-
-        print("data recieved")
-        # extract the header by splitting on delimiter
+       
+      try:
         array = client_request.split(b". .")
-        header_bytes = array[0]
-        array1 = header_bytes.split(b"\n")
-        print(array1[0])
-        file_bytes = array[1]
-        print(str(header_bytes,'utf-8'))
-        print(len(array))
-        #print(file_bytes)
-        file_name = "gotpic.jpg"
-        outFile = open(file_name,"wb")
-        outFile.write(file_bytes)
-        outFile.close()
+        header_bytes = array[0]              #extract header
+        payload_bytes = array[1]             #extract file_payload
+        header_array = header_bytes.split(b"\n")
+
+        mode = (header_array[0]).decode(encoding='UTF-8')
+        file_name = (header_array[1]).decode(encoding='UTF-8')
+        cipher = (header_array[2]).decode(encoding='UTF-8')
         
+      except: 
+        print("cannot split on delmiter")
+     
+      if cipher == "none":
+          getFileNoEncryption(file_name,payload_bytes)
+      if cipher == "aes-128":
+        print("aes-128 not implemented")
             
     if not len(client_request):
       clientSock.close()
       break
+
+def getFileNoEncryption(file_name,payload_bytes):
+
+  print("uploading file to server: " + file_name)
+  outFile = open(file_name,"wb")
+  outFile.write(payload_bytes)
+  outFile.close()
 
 def get_data(socket):
 
