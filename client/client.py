@@ -97,7 +97,27 @@ def startClientNone():
     
     #send just the header 
     header = createHeader(COMMAND,FILENAME,CIPHER)
-    clientSocket.send( header )   
+    clientSocket.send( header )
+    
+    payload = b""
+    while True:
+      #server_request = get_data(clientSocket)
+      print("data recieved from server")
+      data = clientSocket.recv(1024)
+      if data:
+        payload += data
+      else:
+        break
+        
+      #if len(server_request) > 0:
+        # NOT recieving data for some reason, it's definately sending from server
+        #print(server_request)
+      print(payload)
+      size = len(payload)
+      #print("Recieved: "+ FILENAME + " |Size: "+str(size)+" bytes")    
+      #if not len(server_request):
+      
+      #  break
  
   elif(COMMAND=='write'):
     
@@ -113,6 +133,22 @@ def createHeader(COMMAND,CIPHER,FILENAME):
   delimiter = ". ."
   header = bytes(COMMAND+"\n"+CIPHER+"\n"+FILENAME+delimiter,"UTF-8")
   return header
+
+def get_data(socket):
+
+    buff_size = 4096
+    time_out = 5
+    data_buffer = b''
+    socket.settimeout(1)
+    try:
+        while True:
+            data = socket.recv(4096)
+            if not data:
+                break
+            data_buffer += data
+    except:
+        pass
+    return data_buffer
 
 if __name__ == '__main__':
 #  print(str(hashlib.sha256(str_to_bytes("test")).digest()))

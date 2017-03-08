@@ -64,13 +64,14 @@ def client_connect(clientSock,client_ip,client_port):
         uploadMode(file_name,cipher,payload_bytes)
         print(file_name+" uploaded to server from: " + client_ip)
         message = "uploaded file to server: " + file_name
-        clientSock.send(bytes(message,"UTF-8"))
+        ##clientSock.send(bytes(message,"UTF-8"))
       
       # client wants to download a specified file
       elif command == "read":
         payload,size = downloadMode(file_name,cipher)
-        clientSock.send(bytes(payload))
+        clientSock.send(payload)
         print("sending: "+ file_name + " |Size: "+str(size)+" bytes")
+        ##print(payload)
 
       else:
         print( "command: "+command+ " not a valid command" )
