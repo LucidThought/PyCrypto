@@ -37,7 +37,6 @@ def main():
   global KEY 
   global PW
   global FILE
-  print("Main")
 #  print(hashlib.sha256(str_to_bytes("test")).hexdigest())  # This gives a 32-byte key value
 #  print(hashlib.md5("test".encode()).hexdigest()) # This gives a 16-byte key value
 #  rand = os.urandom(32)
@@ -100,10 +99,8 @@ def startClientNone():
   if(COMMAND=='write'):
     
     #send header + payload
-    print("debugx")
     header = createHeader(COMMAND,FILENAME,CIPHER)
     clientSocket.send( header + FILE)
-    print("debugxx")  
 
   else:
     print("I don't know how to " + COMMAND)
@@ -115,9 +112,7 @@ def createHeader(COMMAND,CIPHER,FILENAME):
   return header
 
 if __name__ == '__main__':
-  print("Start")
 #  print(str(hashlib.sha256(str_to_bytes("test")).digest()))
 #  print(str(Random.new().read(AES.block_size)))
   main()
-  print("debug1")
   startClientNone()
