@@ -133,6 +133,8 @@ def startClientNone():
     # WE NEED TO SEND HEADER AHEAD OF TIME IN SEPRATE TRANSMISSION, AND INSTEAD OF SENDING DATA IN ONE SHOT
     # NEED TO SEND 1024 AT A TIME. FILES LARGER THEN RAM WILL BUFFER OVERFLOW OTHERWISE
     # ASSIGNMENT SPECS SAY NOT TO DO THIS
+    # ^ We will likely have to add the section below as part of the above loop. after we read an x-byte segment, we send it and continue reading
+    # ^ The server will have to write out each piece (decrypted when necessary) and check each piece for the EOF signal, not add the EOF signal to the file, and close the file
     header = createHeader(COMMAND,FILENAME,CIPHER)
     clientSocket.send( header + payload)
 
