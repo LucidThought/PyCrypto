@@ -42,6 +42,12 @@ def main():
 #  print(os.urandom(32)) # Randomly generate 32-byte key 
 #  print(Random.new().read(AES.block_size))
 
+  if (len(sys.argv) < 4)
+    print("Use this application with the following:")
+    print("python3 client.py [read/write] hostname:port [none|aes128|aes256] key")
+    print("You must use at least four of the above arguments, in the specified order")
+    sys.exit("Incorrect user input")
+
   if (sys.argv[4]=='none'):
     COMMAND = str(sys.argv[1])
     FILENAME = str(sys.argv[2])
