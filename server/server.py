@@ -2,6 +2,7 @@
 import socket
 import getopt
 import sys
+import os
 from threading import Thread
 
 LISTEN = True
@@ -16,8 +17,6 @@ def start():
   SERVER_PORT = int(sys.argv[1])
   SERVER_HOST = 'localhost' # server host
   start_file_server()
-  #python3 client.py <read> <filename> host:port none
-  #cat file1.txt | ./client write f1.txt localhost:9999 none
 
 def start_file_server():
   server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -59,19 +58,15 @@ def client_connect(clientSock,client_ip,client_port):
         file_name = (header_array[1]).decode(encoding='UTF-8')
         cipher = (header_array[2]).decode(encoding='UTF-8') 
       
-      # client wants to upload specified file
       if command == "write":
-        uploadMode(file_name,cipher,payload_bytes)
+        recieveFileMode(file_name,cipher,payload_bytes)
         print(file_name+" uploaded to server from: " + client_ip)
         message = "uploaded file to server: " + file_name
-        ##clientSock.send(bytes(message,"UTF-8"))
       
       # client wants to download a specified file
       elif command == "read":
-        payload,size = downloadMode(file_name,cipher)
-        clientSock.send(payload)
-        print("sending: "+ file_name + " |Size: "+str(size)+" bytes")
-        ##print(payload)
+
+        sendFileMode(file_name,cipher,clientSock)
 
       else:
         print( "command: "+command+ " not a valid command" )
@@ -81,28 +76,37 @@ def client_connect(clientSock,client_ip,client_port):
       clientSock.close()
       break
 
-def uploadMode(file_name,cipher,payload_bytes):
+def recieveFileMode(file_name,cipher,payload_bytes):
 
   if cipher == "none":
     getFile(file_name,payload_bytes)
   if cipher == "aes-128":
     print("aes-128 not implemented")
 
-def downloadMode(file_name,cipher):
+def sendFileMode(file_name,cipher,clientSock):
 
-   print("server is in download mode")
-   print(file_name)
-   try:
-# This might have to be a call to io.FileIO(name,mode='r'), which will return bytes data representing the file
-# There are other io functions that might accomplish this in a simpler way for bytestream data transfer across the network interface
-     inFile = open(file_name,'rb')
-     payload = inFile.read()
-     size = len(payload)
-     return payload,size
+  print("server is in download mode")
+  print(file_name)
 
-   except:
-     print("file doesn't exist")
-
+  buffSize = 1024
+  with open(file_name,'rb') as infile:
+    
+    file_size = len(infile.read())
+    clientSock.send( bytes(str(file_size)+'. .','UTF-8')) 
+    infile.seek(0)
+    print(str(file_size))
+    #send header
+    d = infile.read(1024)
+    print(d)
+    while d:
+      print(d)
+      clientSock.send(d)
+      d = infile.read(1024)
+    print("file sent")
+    #clientSock.close() 
+  infile.close()
+     
+ 
 def getFile(file_name,payload_bytes):
   
   outFile = open(file_name,"wb")

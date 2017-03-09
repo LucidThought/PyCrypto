@@ -36,7 +36,6 @@ def main():
   global CIPHER
   global KEY 
   global PW
-  global FILE
 #  print(hashlib.sha256(str_to_bytes("test")).hexdigest())  # This gives a 32-byte key value
 #  print(hashlib.md5("test".encode()).hexdigest()) # This gives a 16-byte key value
 #  rand = os.urandom(32)
@@ -44,15 +43,11 @@ def main():
 #  print(os.urandom(32)) # Randomly generate 32-byte key 
 #  print(Random.new().read(AES.block_size))
 
-  # fixed BUG HERE --> CALLING FILE = sys.stdin.buffer.read() can't be called in global during read mode
   if (sys.argv[4]=='none'):
     COMMAND = str(sys.argv[1])
     FILENAME = str(sys.argv[2])
     DEST = str(sys.argv[3])
     CIPHER = 'none'
-
-    if COMMAND == "write":
-      FILE = sys.stdin.buffer.read()
 
   else:
     if(len(sys.argv)==5):
@@ -64,17 +59,12 @@ def main():
       print("Password: " + PW)
       KEY = hashlib.sha256(str_to_bytes(PW)).hexdigest()
 
-      if COMMAND == "write":
-        FILE = sys.stdin.buffer.read()
-
     elif(len(sys.argv)==4):
       COMMAND = str(sys.argv[1])
       FILENAME = str(sys.argv[2])
       DEST = str(argv[3])
       CIPHER = 'none'
 
-      if COMMAND == "write":
-        FILE = sys.stdin.buffer.read()
     
 def str_to_bytes(data):
   utype = type(b''.decode('utf-8'))
@@ -94,34 +84,39 @@ def startClientNone():
   print(COMMAND)
 
   if(COMMAND=="read"):
-    
+
     #send just the header 
     header = createHeader(COMMAND,FILENAME,CIPHER)
     clientSocket.send( header )
+    temp_data = clientSocket.recv(1024)
+    array = temp_data.split(b". .") 
+    print(array[0])
+    file_size = int(array[0])
+    print(file_size)
     
-    payload = b""
-    while True:
-      #server_request = get_data(clientSocket)
-      print("data recieved from server")
-      data = clientSocket.recv(1024)
-      if data:
-        payload += data
-      else:
-        break
-        
-      #if len(server_request) > 0:
-        # NOT recieving data for some reason, it's definately sending from server
-        #print(server_request)
-      sys.stdout.buffer.write(payload)
-      size = len(payload)
-      #print("Recieved: "+ FILENAME + " |Size: "+str(size)+" bytes")    
-      #if not len(server_request):
-      
-      #  break
+    buffer = b""
+    bytes_written = 0
+    buffSize = 1024
+    with open('test.jpg','wb+') as outFile:
+
+      while(bytes_written < file_size):
+        data = clientSocket.recv(buffSize)
+        if not data:
+          break
+        if len(data) + bytes_written > file_size:
+          data = data[:file_size-bytes_written]
+        print(data)
+        outFile.write(data)
+        bytes_written += len(data)
+        ##using test.jpg as a test file, the file transfers properly
+        ##but not sure why you can't use the > operator..
+        ##python3 client.py read gotpic.jpg localhost:3000 none > test2.jpg doesn't work for example.
+        #must have to output using std out line by line. 
  
   elif(COMMAND=='write'):
     
-    #send header + payload
+    ## Read in from stdin.buffer.read()
+    FILE = sys.stdin.buffer.read()
     header = createHeader(COMMAND,FILENAME,CIPHER)
     clientSocket.send( header + FILE)
 
@@ -133,22 +128,6 @@ def createHeader(COMMAND,CIPHER,FILENAME):
   delimiter = ". ."
   header = bytes(COMMAND+"\n"+CIPHER+"\n"+FILENAME+delimiter,"UTF-8")
   return header
-
-def get_data(socket):
-
-    buff_size = 4096
-    time_out = 5
-    data_buffer = b''
-    socket.settimeout(1)
-    try:
-        while True:
-            data = socket.recv(4096)
-            if not data:
-                break
-            data_buffer += data
-    except:
-        pass
-    return data_buffer
 
 if __name__ == '__main__':
 #  print(str(hashlib.sha256(str_to_bytes("test")).digest()))
