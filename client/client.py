@@ -42,7 +42,7 @@ def main():
 #  print(os.urandom(32)) # Randomly generate 32-byte key 
 #  print(Random.new().read(AES.block_size))
 
-  if (len(sys.argv) < 4)
+  if (len(sys.argv) < 4):
     print("Use this application with the following:")
     print("python3 client.py [read/write] hostname:port [none|aes128|aes256] key")
     print("You must use at least four of the above arguments, in the specified order")
