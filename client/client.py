@@ -95,6 +95,7 @@ def startClientNone():
     
     bytes_written = 0
     buffSize = 1024
+    ## this writing to a file is here purely for testing. the > operator now works.
     with open('test.jpg','wb+') as outFile:
 
       while(bytes_written < file_size):
