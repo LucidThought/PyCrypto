@@ -20,7 +20,6 @@ DEST = ''
 CIPHER = ''
 KEY = ''
 PW = ''
-FILE = b''
 
 # The following command read stdin as a bytestream:
 # inBytes = sys.stdin.buffer.read()
@@ -90,11 +89,10 @@ def startClientNone():
     clientSocket.send( header )
     temp_data = clientSocket.recv(1024)
     array = temp_data.split(b". .") 
-    print(array[0])
+    ##print(array[0])
     file_size = int(array[0])
-    print(file_size)
+    ##print(file_size)
     
-    buffer = b""
     bytes_written = 0
     buffSize = 1024
     with open('test.jpg','wb+') as outFile:
@@ -103,22 +101,33 @@ def startClientNone():
         data = clientSocket.recv(buffSize)
         if not data:
           break
+
         if len(data) + bytes_written > file_size:
           data = data[:file_size-bytes_written]
-        print(data)
+
+        sys.stdout.buffer.write(data)
         outFile.write(data)
         bytes_written += len(data)
-        ##using test.jpg as a test file, the file transfers properly
-        ##but not sure why you can't use the > operator..
-        ##python3 client.py read gotpic.jpg localhost:3000 none > test2.jpg doesn't work for example.
-        #must have to output using std out line by line. 
  
   elif(COMMAND=='write'):
     
-    ## Read in from stdin.buffer.read()
-    FILE = sys.stdin.buffer.read()
+    payload = b""
+    with open('temp_dat','wb+') as tempFile:
+    
+      while True: 
+        data = sys.stdin.buffer.read(1)
+        if not data:
+          break
+        payload += data
+        tempFile.write(data) 
+    tempFile.close()
+   
+    # I still have to re work this code.
+    # WE NEED TO SEND HEADER AHEAD OF TIME IN SEPRATE TRANSMISSION, AND INSTEAD OF SENDING DATA IN ONE SHOT
+    # NEED TO SEND 1024 AT A TIME. FILES LARGER THEN RAM WILL BUFFER OVERFLOW OTHERWISE
+    # ASSIGNMENT SPECS SAY NOT TO DO THIS
     header = createHeader(COMMAND,FILENAME,CIPHER)
-    clientSocket.send( header + FILE)
+    clientSocket.send( header + payload)
 
   else:
     print("I don't know how to " + COMMAND)

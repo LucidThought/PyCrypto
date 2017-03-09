@@ -95,13 +95,11 @@ def sendFileMode(file_name,cipher,clientSock):
     clientSock.send( bytes(str(file_size)+'. .','UTF-8')) 
     infile.seek(0)
     print(str(file_size))
-    #send header
-    d = infile.read(1024)
-    print(d)
-    while d:
-      print(d)
-      clientSock.send(d)
-      d = infile.read(1024)
+    #send header (only sending size right now, will need more in header later for encryption)
+    data = infile.read(1024)
+    while data:
+      clientSock.send(data)
+      data = infile.read(1024)
     print("file sent")
     #clientSock.close() 
   infile.close()
