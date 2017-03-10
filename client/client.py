@@ -119,7 +119,8 @@ def startClientNone():
   elif(COMMAND=='write'):
     
     payload = b""
-    with open('temp_dat','wb+') as tempFile:
+    temp_data = "temp_data"
+    with open(temp_data,'wb+') as tempFile:
     
       while True: 
         data = sys.stdin.buffer.read(1)
@@ -128,6 +129,8 @@ def startClientNone():
         payload += data
         tempFile.write(data) 
     tempFile.close()
+
+
    
     # I still have to re work this code.
     # WE NEED TO SEND HEADER AHEAD OF TIME IN SEPRATE TRANSMISSION, AND INSTEAD OF SENDING DATA IN ONE SHOT
