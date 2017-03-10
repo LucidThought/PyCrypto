@@ -114,7 +114,7 @@ def getFile(file_name,segment_size,clientSock):
  
 def sendFileMode(file_name,cipher,clientSock):
 
-  print("server is in download mode")
+  print("server is in getFile mode")
   print(file_name)
 
   buffSize = 1024

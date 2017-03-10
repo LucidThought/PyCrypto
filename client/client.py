@@ -122,14 +122,12 @@ def startClientNone():
   elif(COMMAND=='write'):
     
     payload_file = "temp_data"
-    payload = b""
     with open(payload_file,'wb+') as f:
     
       while True: 
         data = sys.stdin.buffer.read(1)
         if not data:
           break
-        payload += data
         f.write(data) 
     f.close()
     
