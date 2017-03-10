@@ -37,37 +37,32 @@ def client_connect(clientSock,client_ip,client_port):
   
   while True:
     
-    client_request = get_data(clientSock)
+    client_request = clientSock.recv(1024)
     if len(client_request) > 0:
        
-      #Split on delimiter works, i.e. client in write mode with payload
-      try:
-        array = client_request.split(b". .")
-        header_bytes = array[0]              #extract header
-        payload_bytes = array[1]             #extract file_payload
-        header_array = header_bytes.split(b"\n")
-		
-        command = (header_array[0]).decode(encoding='UTF-8')
-        file_name = (header_array[1]).decode(encoding='UTF-8')
-        cipher = (header_array[2]).decode(encoding='UTF-8')     
+      #Split incoming header on delimiter ("\n"), creates an array of values
+      header_array = client_request.split(b"\n")
+      print(header_array)
+      #Extract those values into appropriate variables		
+      command = (header_array[0]).decode(encoding='UTF-8')
+      file_name = (header_array[1]).decode(encoding='UTF-8')
+      cipher = (header_array[2]).decode(encoding='UTF-8')     
       
-      # Cannot split on delimiter, i.e. client is in read mode with no payload  
-      except:
-        header_array = header_bytes.split(b"\n")
-        command = (header_array[0]).decode(encoding='UTF-8')
-        file_name = (header_array[1]).decode(encoding='UTF-8')
-        cipher = (header_array[2]).decode(encoding='UTF-8') 
+      # DEBUGGING
+      print(command)
+      print(file_name)
+      print(cipher) 
       
       if command == "write":
-        recieveFileMode(file_name,cipher,payload_bytes)
+        recieveFileMode(file_name,cipher,clientSock)
         print(file_name+" uploaded to server from: " + client_ip)
-        message = "uploaded file to server: " + file_name
+        message = "uploading file to server: " + file_name
       
       # client wants to download a specified file
       elif command == "read":
 
         sendFileMode(file_name,cipher,clientSock)
-
+   
       else:
         print( "command: "+command+ " not a valid command" )
 
@@ -76,13 +71,47 @@ def client_connect(clientSock,client_ip,client_port):
       clientSock.close()
       break
 
-def recieveFileMode(file_name,cipher,payload_bytes):
+def recieveFileMode(file_name,cipher,clientSock):
+
+  segment_size = 1024
 
   if cipher == "none":
-    getFile(file_name,payload_bytes)
+    getFile(file_name,segment_size,clientSock)
   if cipher == "aes-128":
     print("aes-128 not implemented")
+  if cipher == "aes-256":
+    print("aes-256 not implemented")
 
+  
+
+def getFile(file_name,segment_size,clientSock):
+  
+  buffSize = segment_size  # default 1024
+  #get file size header from client, delmited with ". ."
+  file_header = clientSock.recv(segment_size)
+  print("getting here")
+  header_array = file_header.split(b". .")
+
+  ##print(header_array[0]) TEST
+  file_size = int(header_array[0]) ##extract the file size from header
+  ##print(file_size) TEST
+  bytes_written = 0
+  
+  #CREATE THE FILE ON THE SERVER, WILL OVERWRITE IF EXISTS
+  with open(file_name,"wb+") as f:
+    while(bytes_written < file_size):
+      data = clientSock.recv(buffSize)
+      if not data:
+        break
+      if len(data) + bytes_written > file_size:
+        data = data[:file_size-bytes_written]
+      ##append
+      f.write(data)
+      bytes_written += len(data)
+  f.close()
+  print("file: "+file_name+" saved to server") 
+  
+ 
 def sendFileMode(file_name,cipher,clientSock):
 
   print("server is in download mode")
@@ -103,32 +132,6 @@ def sendFileMode(file_name,cipher,clientSock):
     print("file sent")
     #clientSock.close() 
   infile.close()
-     
- 
-def getFile(file_name,payload_bytes):
-  
-  outFile = open(file_name,"wb")
-  outFile.write(payload_bytes)
-  outFile.close()
-
-def get_data(socket):
-
-    buff_size = 4096
-    time_out = 5
-    ####### BUG found out here, need to convert the data to a 
-    ####### byte string by putting b before it.
-    ####### convert this later to regular string if need be.
-    data_buffer = b''
-    socket.settimeout(5)
-    try:
-        while True:
-            data = socket.recv(4096)
-            if not data:
-                break
-            data_buffer += data
-    except:
-        pass
-    return data_buffer
 
 if __name__ == "__main__":
   start()

@@ -90,13 +90,15 @@ def startClientNone():
 
   if(COMMAND=="read"):
 
-    #send just the header 
-    header = createHeader(COMMAND,FILENAME,CIPHER)
-    clientSocket.send( header )
+    #send just the header, requesting a file from the server
+    segment_size = 1024 
+    header = sendHeader(COMMAND,FILENAME,CIPHER,segment_size,clientSocket)
+
+    ## get file header from server (file size delmited with ". ." on the end)
     temp_data = clientSocket.recv(1024)
     array = temp_data.split(b". .") 
     ##print(array[0])
-    file_size = int(array[0])
+    file_size = int(array[0]) ## extract the files size from header.
     ##print(file_size)
     
     bytes_written = 0
@@ -115,40 +117,62 @@ def startClientNone():
         sys.stdout.buffer.write(data)
         outFile.write(data)
         bytes_written += len(data)
+      outFile.close()
  
   elif(COMMAND=='write'):
     
+    payload_file = "temp_data"
     payload = b""
-    temp_data = "temp_data"
-    with open(temp_data,'wb+') as tempFile:
+    with open(payload_file,'wb+') as f:
     
       while True: 
         data = sys.stdin.buffer.read(1)
         if not data:
           break
         payload += data
-        tempFile.write(data) 
-    tempFile.close()
+        f.write(data) 
+    f.close()
+    
+    #First communication to the server should be the Cipher + IV for CBC
+    # example 
+    # iv = createIV()
+    # initalizationHeader = iv + ". ." + cipher
+    # clientSock.send( initalization vector )
 
-
-   
-    # I still have to re work this code.
-    # WE NEED TO SEND HEADER AHEAD OF TIME IN SEPRATE TRANSMISSION, AND INSTEAD OF SENDING DATA IN ONE SHOT
-    # NEED TO SEND 1024 AT A TIME. FILES LARGER THEN RAM WILL BUFFER OVERFLOW OTHERWISE
-    # ASSIGNMENT SPECS SAY NOT TO DO THIS
-    # ^ We will likely have to add the section below as part of the above loop. after we read an x-byte segment, we send it and continue reading
+    ## this entire header needs to be encrypted
+    segment_size = 1024  #bytes 
+    
+    #Create and send header
+    sendHeader(COMMAND,FILENAME,CIPHER,segment_size,clientSocket)
+    #Send payload (the actual file)
+    sendFileMode(payload_file,segment_size,clientSocket)
+        # ^ We will likely have to add the section below as part of the above loop. after we read an x-byte segment, we send it and continue reading
     # ^ The server will have to write out each piece (decrypted when necessary) and check each piece for the EOF signal, not add the EOF signal to the file, and close the file
-    header = createHeader(COMMAND,FILENAME,CIPHER)
-    clientSocket.send( header + payload)
-
+    
   else:
     print("I don't know how to " + COMMAND)
+      
+def sendFileMode(payload_file,segment_size,clientSocket):
+    
+    print(payload_file)
+    buffSize = segment_size #default 1024
 
-def createHeader(COMMAND,CIPHER,FILENAME):
+    with open(payload_file,'rb') as f:
+      payload_size = len(f.read())
+      print(payload_size)
+      clientSocket.send( bytes(str(payload_size)+'. .','UTF-8')) 
+      f.seek(0) #reset read pointer
+      data = f.read(buffSize)
+      while data:
+        clientSocket.send(data)
+        data = f.read(buffSize)
+    f.close()
 
-  delimiter = ". ."
-  header = bytes(COMMAND+"\n"+CIPHER+"\n"+FILENAME+delimiter,"UTF-8")
-  return header
+def sendHeader(COMMAND,CIPHER,FILENAME,segment_size,clientSocket):
+
+  buffSize = segment_size
+  header = bytes(COMMAND+"\n"+CIPHER+"\n"+FILENAME,"UTF-8")
+  clientSocket.send( header )
 
 if __name__ == '__main__':
 #  print(str(hashlib.sha256(str_to_bytes("test")).digest()))
