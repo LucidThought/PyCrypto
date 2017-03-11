@@ -1,16 +1,11 @@
-
-
 #!/usr/bin/python3
-
 import base64
 import hashlib
 import sys
 import time
 import socket
 import os
-
-
-
+import struct
 #from Crypto import Random
 #from Crypto.Cipher import AES
 
@@ -20,13 +15,6 @@ DEST = ''
 CIPHER = ''
 KEY = ''
 PW = ''
-
-# The following command read stdin as a bytestream:
-# inBytes = sys.stdin.buffer.read()
-# print(inBytes)
-# outFile = open("pic.jpg","wb")
-# outFile.write(inBytes)
-# outFile.close()
 
 def main():
   global COMMAND
@@ -86,7 +74,6 @@ def startClientNone():
   sockDEST = DEST[separator+1:]
   clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   clientSocket.connect((ipDEST,int(sockDEST)))
-  print(COMMAND)
 
   if(COMMAND=="read"):
 
@@ -121,6 +108,8 @@ def startClientNone():
  
   elif(COMMAND=='write'):
     
+    print("Client is in write mode")
+    ##Move data into temp_data file (incase of large files)
     payload_file = "temp_data"
     with open(payload_file,'wb+') as f:
     
@@ -130,46 +119,60 @@ def startClientNone():
           break
         f.write(data) 
     f.close()
-    
-    #First communication to the server should be the Cipher + IV for CBC
-    # example 
-    # iv = createIV()
-    # initalizationHeader = iv + ". ." + cipher
-    # clientSock.send( initalization vector )
 
-    ## this entire header needs to be encrypted
-    segment_size = 1024  #bytes 
-    
-    #Create and send header
-    sendHeader(COMMAND,FILENAME,CIPHER,segment_size,clientSocket)
-    #Send payload (the actual file)
-    sendFileMode(payload_file,segment_size,clientSocket)
-        # ^ We will likely have to add the section below as part of the above loop. after we read an x-byte segment, we send it and continue reading
-    # ^ The server will have to write out each piece (decrypted when necessary) and check each piece for the EOF signal, not add the EOF signal to the file, and close the file
+    # Send first communication to server ( first message = CIPHER + IV (nonce) + padding)
+    # first communication is always 1024 bytes transmission (NO ENCRYPTION HERE)
+    iv = "randomNonce"
+    first_message = CIPHER + "\n" + iv + "\n"
+    first_message_length = len(first_message)
+    padding = 1024 - first_message_length
+    padding_arg1 = str(padding)+"B"
+    # i.e. input_chunk + struct.pack('50B',*([0]*50)) --> appends 50 bytes of 0 padding
+    padded_message = bytes(first_message,'UTF-8') + struct.pack(padding_arg1,*([0]*padding))
+    clientSocket.send(padded_message)
+    print("Hi server --> sending cipher + IV(nonce) + padding: "+ str(len(padded_message))+" bytes")
+
+    if CIPHER == "none":
+      
+      #Now send the header + payload in the clear
+      segment_size = 1024 
+      sendFileNoEncryption(payload_file,segment_size,clientSocket)
+
+    elif CIPHER == "aes128":
+      segment_size = 16
+
+    elif CIPHER == "aes256":
+      segment_size = 16
     
   else:
     print("I don't know how to " + COMMAND)
       
-def sendFileMode(payload_file,segment_size,clientSocket):
+def sendFileNoEncryption(payload_file,segment_size,clientSocket):
+  global COMMAND
+  global DEST
+  global FILENAME
+ 
+  #Send header before payload
+  sendHeaderNoEncrypt(COMMAND,FILENAME,clientSocket)
     
-    print(payload_file)
-    buffSize = segment_size #default 1024
+  with open(payload_file,'rb') as f:
+    
+    # Get payload size, and send to server so it knows how much data to recieve
+    payload_size = len(f.read())
+    print("Client sending file of size: " + str(payload_size) + " bytes")  ## TEST
+    clientSocket.send( bytes(str(payload_size)+'. .','UTF-8'))
 
-    with open(payload_file,'rb') as f:
-      payload_size = len(f.read())
-      print(payload_size)
-      clientSocket.send( bytes(str(payload_size)+'. .','UTF-8')) 
-      f.seek(0) #reset read pointer
-      data = f.read(buffSize)
-      while data:
-        clientSocket.send(data)
-        data = f.read(buffSize)
+    #reset read pointer on payload file, and send file 1024 bytes at a time
+    f.seek(0) 
+    data = f.read(segment_size)
+    while data:
+      clientSocket.send(data)
+      data = f.read(segment_size)
     f.close()
 
-def sendHeader(COMMAND,CIPHER,FILENAME,segment_size,clientSocket):
+def sendHeaderNoEncrypt(COMMAND,FILENAME,clientSocket):
 
-  buffSize = segment_size
-  header = bytes(COMMAND+"\n"+CIPHER+"\n"+FILENAME,"UTF-8")
+  header = bytes(COMMAND+"\n"+FILENAME+"\n"+CIPHER,"UTF-8")
   clientSocket.send( header )
 
 if __name__ == '__main__':

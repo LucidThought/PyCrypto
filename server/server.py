@@ -33,63 +33,78 @@ def start_file_server():
     print(client_ip + ':' + client_port + ' has connected')
     Thread(target=client_connect, args=(clientSock,client_ip,client_port)).start()
 
+
 def client_connect(clientSock,client_ip,client_port):
   
+  IVnonce = b""
+
   while True:
     
-    client_request = clientSock.recv(1024)
-    if len(client_request) > 0:
-       
-      #Split incoming header on delimiter ("\n"), creates an array of values
-      header_array = client_request.split(b"\n")
-      print(header_array)
-      #Extract those values into appropriate variables		
-      command = (header_array[0]).decode(encoding='UTF-8')
-      file_name = (header_array[1]).decode(encoding='UTF-8')
-      cipher = (header_array[2]).decode(encoding='UTF-8')     
+    #Get the Cipher type from the client
+    first_message = clientSock.recv(1024)   
+    if len(first_message) > 0:
+      first_message_array = first_message.split(b"\n")
+      cipher = (first_message_array[0]).decode(encoding='UTF-8')
+      nonce =  (first_message_array[1]).decode(encoding='UTF-8')
       
-      # DEBUGGING
-      print(command)
-      print(file_name)
-      print(cipher) 
-      
-      if command == "write":
-        recieveFileMode(file_name,cipher,clientSock)
-        print(file_name+" uploaded to server from: " + client_ip)
-        message = "uploading file to server: " + file_name
-      
-      # client wants to download a specified file
-      elif command == "read":
+      print("cipher: "+cipher)
+      print("nonce(IV): " +nonce)
 
-        sendFileMode(file_name,cipher,clientSock)
-   
-      else:
-        print( "command: "+command+ " not a valid command" )
+    #No Encryption (1024 byte blocks--default)
+    if cipher == "none":
+      segment_size = 1024
+      noEncryptionMode(segment_size, clientSock,client_ip)
 
-    # No more data to recieve, close the client socket
-    if not len(client_request):
-      clientSock.close()
-      break
+    #AES 128 (16 byte blocks)
+    elif cipher == "aes128":
+      segment_size = 16
+      aes128EncryptionMode(segment_size, clientSock,client_ip)
+ 
+    #AES 256 (16 byte blocks)
+    elif cipher == "aes256":
+      segment_size = 16
+      aes256EncryptionMode(segment_size, clientSock,client_ip)
 
-def recieveFileMode(file_name,cipher,clientSock):
 
-  segment_size = 1024
-
-  if cipher == "none":
-    getFile(file_name,segment_size,clientSock)
-  if cipher == "aes-128":
-    print("aes-128 not implemented")
-  if cipher == "aes-256":
-    print("aes-256 not implemented")
-
+def aes128EncryptionMode(segment_size,clientSock,client_ip):
   
+  print("decryption in aes128 not implemented yet")
 
-def getFile(file_name,segment_size,clientSock):
+
+def aes256EncryptionMode(segment_size,clientSock,client_ip):
+
+  print("decryption in aes128 not implemented yet")
+
+
+def noEncryptionMode(segment_size, clientSock, client_ip):
+
+  client_request = clientSock.recv(segment_size)
+  if len(client_request) > 0:
+
+    header_array = client_request.split(b"\n")
+    command = (header_array[0]).decode(encoding='UTF-8')
+    file_name = (header_array[1]).decode(encoding='UTF-8')
+    print("Client command: " + command)  # DEBUGGING
+    print("Filename: " + file_name)      # DEBUGGING
+      
+    if command == "write":
+      
+      print("Attempting to upload file: "+file_name+" to server from: " + client_ip)
+      getFileNoEncryption(file_name,segment_size,clientSock)
+      
+    elif command == "read":
+
+      sendFileMode(file_name,cipher,clientSock)
+   
+    else:
+      print( "command: "+command+ " not a valid command" )
+
+
+def getFileNoEncryption(file_name,segment_size,clientSock):
   
   buffSize = segment_size  # default 1024
   #get file size header from client, delmited with ". ."
   file_header = clientSock.recv(segment_size)
-  print("getting here")
   header_array = file_header.split(b". .")
 
   ##print(header_array[0]) TEST
@@ -109,7 +124,7 @@ def getFile(file_name,segment_size,clientSock):
       f.write(data)
       bytes_written += len(data)
   f.close()
-  print("file: "+file_name+" saved to server") 
+  print("file: "+file_name+" successfully uploaded to server") 
   
  
 def sendFileMode(file_name,cipher,clientSock):
