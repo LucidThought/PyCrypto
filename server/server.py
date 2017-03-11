@@ -94,7 +94,8 @@ def noEncryptionMode(segment_size, clientSock, client_ip):
       
     elif command == "read":
 
-      sendFileMode(file_name,cipher,clientSock)
+      print("client is in read mode")
+      sendFileNoEncryption(file_name,cipher,clientSock)
    
     else:
       print( "command: "+command+ " not a valid command" )
@@ -102,14 +103,12 @@ def noEncryptionMode(segment_size, clientSock, client_ip):
 
 def getFileNoEncryption(file_name,segment_size,clientSock):
   
-  buffSize = segment_size  # default 1024
+  buffSize = segment_size
   #get file size header from client, delmited with ". ."
   file_header = clientSock.recv(segment_size)
   header_array = file_header.split(b". .")
 
-  ##print(header_array[0]) TEST
   file_size = int(header_array[0]) ##extract the file size from header
-  ##print(file_size) TEST
   bytes_written = 0
   
   #CREATE THE FILE ON THE SERVER, WILL OVERWRITE IF EXISTS
@@ -127,7 +126,7 @@ def getFileNoEncryption(file_name,segment_size,clientSock):
   print("file: "+file_name+" successfully uploaded to server") 
   
  
-def sendFileMode(file_name,cipher,clientSock):
+def sendFileNoEncryption(file_name,cipher,clientSock):
 
   print("server is in getFile mode")
   print(file_name)

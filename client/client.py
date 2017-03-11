@@ -77,9 +77,12 @@ def startClientNone():
 
   if(COMMAND=="read"):
 
-    #send just the header, requesting a file from the server
+    ### THIS IS BROKEN HEERE, NEED TO UPDATE THE CODE TO BE SIMILAR TO
+    ### WRITE MODE!
+    ## NEED TO SEND WELCOME MESSAGE TO SEVER IN PROPER FORMAT LIKE WRITE MODE
+
     segment_size = 1024 
-    header = sendHeader(COMMAND,FILENAME,CIPHER,segment_size,clientSocket)
+    header = sendHeaderNoEncrypt(COMMAND,FILENAME,clientSocket)
 
     ## get file header from server (file size delmited with ". ." on the end)
     temp_data = clientSocket.recv(1024)
@@ -172,7 +175,7 @@ def sendFileNoEncryption(payload_file,segment_size,clientSocket):
 
 def sendHeaderNoEncrypt(COMMAND,FILENAME,clientSocket):
 
-  header = bytes(COMMAND+"\n"+FILENAME+"\n"+CIPHER,"UTF-8")
+  header = bytes(COMMAND+"\n"+FILENAME+"\n","UTF-8")
   clientSocket.send( header )
 
 if __name__ == '__main__':
