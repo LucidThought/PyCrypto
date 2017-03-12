@@ -66,14 +66,14 @@ def main():
   if(COMMAND=="read"):
     if(CIPHER=="none"):
        startClientNone()
-    elif(CIPHER=="aes128") or (CIPHER=="aes265"):
+    elif(CIPHER=="aes128") or (CIPHER=="aes256"):
        print("not yet implemented")
     else:
       sys.exit("Unsupported Cryptography Cipher")
   elif(COMMAND=="write"):
     if(CIPHER=="none"):
        startClientNone()
-    elif(CIPHER=="aes128") or (CIPHER=="aes265"):
+    elif(CIPHER=="aes128") or (CIPHER=="aes256"):
       separator = DEST.find(":")
       ipDEST = DEST[0:separator]
       sockDEST = DEST[separator+1:]
