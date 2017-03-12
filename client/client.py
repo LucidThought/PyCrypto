@@ -212,7 +212,7 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
 
   clientSocket.send(padded_header) # Send crypto header, containing crypto mode and IV
 # The following code counts the size of the file it is about to send
-  fileize = 0
+  fileSize = 0
   tempFile = "temp_dat"
   print("test")
   with open(tempFile,'wb+') as f:
@@ -221,7 +221,7 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
       if not chunk:
         break
       f.write(chunk)
-      filesize += 1
+      fileSize += 1
     f.close()
     
 #  unpad = lambda s : s[0:-ord(s[-1])] # This defines an unpad function that can be called with unpad(decryptedString)
