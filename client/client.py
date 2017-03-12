@@ -319,7 +319,7 @@ def recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
       #bytes_written += len(data)
       if len(data) + bytes_written > fileSize:
       #if(bytes_written > fileSize):
-        decryptedData = decryptedData[:fileSize - segment_s]
+        decryptedData = decryptedData[:fileSize % segment_s]
       bytes_written += len(data)
       sys.stdout.buffer.write(decryptedData)
   
