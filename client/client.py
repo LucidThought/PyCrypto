@@ -25,8 +25,8 @@ def main():
   global KEY 
   global PW
   global IV
-#  print(hashlib.sha256(str_to_bytes("test")).hexdigest())  # This gives a 32-byte key value
-#  print(hashlib.md5("test".encode()).hexdigest()) # This gives a 16-byte key value
+#  print(hashlib.sha256("string".encode()).digest())  # This gives a 32-byte key value
+#  print(hashlib.md5("string".encode()).hexdigest()) # This gives a 16-byte key value
 #  rand = os.urandom(32)
 #  print(hashlib.md5(rand).hexdigest()) # Randomly generate 16-byte key
 #  print(os.urandom(32)) # Randomly generate 32-byte key 
@@ -53,7 +53,7 @@ def main():
       DEST = str(sys.argv[3])
       CIPHER = str(sys.argv[4])
       PW = str(sys.argv[5])
-      print("Password: " + PW)
+#      print("Password: " + PW)
 
     elif(len(sys.argv)==4):
       COMMAND = str(sys.argv[1])
@@ -220,6 +220,7 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
 # The following code counts the size of the file it is about to send
   fileSize = 0
   tempFile = "temp_dat"
+
   with open(tempFile,'wb+') as f:
     while(True):
       chunk = sys.stdin.buffer.read(1)
@@ -250,9 +251,8 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
         if(len(chunk)==0):
           break
         elif(len(chunk) % 16 != 0):
-          dchunk = str(chunk)
-          dchunk += ' ' * (16 - len(chunk) % 16)
-          chunk = dchunk.encode()
+          dchunk = b'\x00' * (16 - len(chunk) % 16)
+          chunk = b"".join([chunk,dchunk])
         if(len(chunk) % 16 == 0):
           encrypted = encryptor.encrypt(chunk)
           clientSocket.send(encrypted)
@@ -272,9 +272,8 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
         if(len(chunk)==0):
           break
         elif(len(chunk) % 16 != 0):
-          dchunk = str(chunk)
-          dchunk += ' ' * (16 - len(chunk) % 16)
-          chunk = dchunk.encode()
+          dchunk = b'\x00' * (16 - len(chunk) % 16)
+          chunk = b"".join([chunk,dchunk])
         if(len(chunk) % 16 == 0):
           encrypted = encryptor.encrypt(chunk)
           clientSocket.send(encrypted)
@@ -306,30 +305,29 @@ def recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
         decryptedByteString = decryptor.decrypt(chunk)
         decryptedString = decryptedByteString.decode("UTF-8") #decodes the bytestring segment into a string
         decryptHeader = decryptHeader + decryptedString
-        if (decryptHeader.find(". .") == -1):
-          print("No delimiter detected") #DEBUG
-        else:
-          print("Delimiter detected, removing padding from segment") #debug
+        if (decryptHeader.find(". .") != -1):
           index = decryptHeader.find(". .") 
           decryptHeader = decryptHeader[:index]
           break
     header_array = decryptHeader.split("\n")
     verify = header_array[0]
-    sizeHeader = int(header_array[1])
+    fileSize = int(header_array[1])
 
     if(verify == "False"):
       sys.exit("File does not exist")
 
+    data = "d"
     bytes_written = 0
     while(True):
-      data = clientSocket.recv(segment_s)
       if not data:
         break
+      data = clientSocket.recv(segment_s)
       decryptedData = decryptor.decrypt(data)
-      bytes_written += segment_s
-      if(bytes_written > sizeHeader):
-        decryptedData = decryptedData[:sizeHeader % segment_s]
+      bytes_written += len(data)
+      if(bytes_written > fileSize):
+        decryptedData = decryptedData[:fileSize % segment_s]
       sys.stdout.buffer.write(decryptedData)
+#    sys.exit("File Received")
 
 
   elif(CIPHER == "aes256"):
@@ -355,7 +353,7 @@ def recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
       if(bytes_written > ruHeader):
         decryptedData = decryptedData[:ruHeader % segment_s]
         sys.stdout.buffer.write(decryptedData)
-      sys.stdout.buffer.write(decryptedData)
+      sys.stdout.buffer.write(decryptedData[:4] + "\n")
 
 if __name__ == '__main__':
   main()

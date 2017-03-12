@@ -256,7 +256,6 @@ def sendFileAes128(key, IV, segment_size, FILENAME,clientSock):
   with open(FILENAME,'rb') as rfile:
     while(True):
       chunk = rfile.read(segment_size)
-      print(len(chunk))
       if not chunk:
         break
       elif(len(chunk) % segment_size != 0):
@@ -266,6 +265,7 @@ def sendFileAes128(key, IV, segment_size, FILENAME,clientSock):
       if(len(chunk) % segment_size == 0):
         oChunk = encryptor.encrypt(chunk)
         clientSock.send(oChunk)
+  rfile.close()
 
 def sendFileAes256(key, IV, segment_size, FILENAME,clientSock):
   print("sendFileAes256 not implemented")
