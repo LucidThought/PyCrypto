@@ -33,6 +33,8 @@ def main():
 #  print(Random.new().read(AES.block_size))
 
   IV = Random.new().read(AES.block_size)  # This generates a random IV
+  print(str(IV))
+  print(len(IV))
 
   if (len(sys.argv) < 4):
     print("Use this application with the following:")
@@ -209,12 +211,13 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
   # the server getFileAes128 function needs to remove final padding
   # and it's checking each 16 bytes for ". ." 
   global IV
-  pad = lambda s: s + (segment_s - len(s) % segment_s) * str_to_bytes(chr(segment_s - len(s) % segment_s)) # This defines a pad function that can be called with pad(string)
-  header = bytes(CIPHER + "\n" + IV + "\n","UTF-8")
-  padding = 1024 - len(header)
-  padded_header = bytes(header,'UTF-8') + struct.pack(str(padding)+"B",*([0]*padding))
+  pad = lambda s: s + (segment_s - len(s) % segment_s) * chr(segment_s - len(s) % segment_s) # This defines a pad function that can be called with pad(string)
+  cheader = CIPHER + "\n" #+ IV + "\n"
+  padding = 1024 - len(cheader)
+  padded_header = bytes(cheader,'UTF-8') + struct.pack(str(padding)+"B",*([0]*padding))
 
   clientSocket.send(padded_header) # Send crypto header, containing crypto mode and IV
+  clientSocket.send(IV)
 # The following code counts the size of the file it is about to send
   fileSize = 0
   tempFile = "temp_dat"
@@ -238,9 +241,10 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
 #    pad(c_checker)
 #    crypto_checker = 
          
-    c_header = COMMAND + "\n" + FILENAME + "\n" + fileSize + ". ."  # The crypto header needs to be filled with the command, filename, and filesize 
+    c_header = COMMAND + "\n" + FILENAME + "\n" + str(fileSize) + ". ."  # The crypto header needs to be filled with the command, filename, and filesize 
     crypt_header = pad(c_header)
-    cryto_header = encryptor.encrypt(bytes(crypt_header,"UTF-8"))
+    crypto_header = encryptor.encrypt(crypt_header.encode("UTF-8"))
+    clientSocket.send(crypto_header)
     
     with open(tempFile,'rb') as inload:
       while(True):
@@ -248,9 +252,12 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
         if(len(chunk)==0):
           break
         elif(len(chunk) % 16 != 0):
-          chunk += bytes(' ' * (16 - len(chunk) % 16))
-        encrypted = encryptor.encrypt(chunk)
-        clientSocket.send(encrypted)
+          dchunk = str(chunk)
+          dchunk += ' ' * (16 - len(chunk) % 16)
+          chunk = dchunk.encode()
+        if(len(chunk) % 16 == 0):
+          encrypted = encryptor.encrypt(chunk)
+          clientSocket.send(encrypted)
 
   elif(CIPHER=="aes256"): # This block reads from stdin in 16 byte segments, encrypts and sends them as they are read
     key = hashlib.sha256(PW.encode()).hexdigest() # Generates a 32-byte key from the given password

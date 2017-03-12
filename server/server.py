@@ -3,7 +3,12 @@ import socket
 import getopt
 import sys
 import os
+import hashlib
+import base64
+import time
 from threading import Thread
+from Crypto import Random
+from Crypto.Cipher import AES
 
 LISTEN = True
 SERVER_HOST = ''
@@ -15,8 +20,11 @@ def start():
   # server <PORT> [KEY]
   global SERVER_PORT
   global SERVER_HOST
+  global PW
   SERVER_PORT = int(sys.argv[1])
   SERVER_HOST = 'localhost' # server host
+  if(len(sys.argv) == 3):
+    PW = str(sys.argv[2])
   start_file_server()
 
 def start_file_server():
@@ -36,8 +44,8 @@ def start_file_server():
 
 
 def client_connect(clientSock,client_ip,client_port):
-  
   IVnonce = b""
+  cipher = ''
 
   while True:
     
@@ -45,11 +53,12 @@ def client_connect(clientSock,client_ip,client_port):
     first_message = clientSock.recv(1024)   
     if len(first_message) > 0:
       first_message_array = first_message.split(b"\n")
-      cipher = (first_message_array[0]).decode(encoding='UTF-8')
-      nonce =  (first_message_array[1]).decode(encoding='UTF-8')
-      
+      cipher = (first_message_array[0]).decode('UTF-8')
+      IV = clientSock.recv(16)
+#      IV =  (first_message_array[1])
+      print(len(IV))
       print("cipher: "+cipher)
-      print("nonce(IV): " +nonce)
+      print("IV: " +str(IV))
 
     #No Encryption (1024 byte blocks--default)
     if cipher == "none":
@@ -59,7 +68,7 @@ def client_connect(clientSock,client_ip,client_port):
     #AES 128 (16 byte blocks)
     elif cipher == "aes128":
       segment_size = 16
-      aes128EncryptionMode(segment_size, clientSock,client_ip)
+      aes128EncryptionMode(IV, segment_size, clientSock,client_ip)
  
     #AES 256 (16 byte blocks)
     elif cipher == "aes256":
@@ -99,35 +108,52 @@ def noEncryptionMode(segment_size, clientSock, client_ip):
     else:
       print( "command: "+command+ " not a valid command" )
 
-def aes128EncryptionMode(segment_size,clientSock,client_ip):
+def aes128EncryptionMode(IV, segment_size,clientSock,client_ip):
+  global PW
   
-  key = hashlib.sha256(PW.encode()).hexdigest()
+  key = hashlib.md5(PW.encode()).hexdigest()
   decryptor = AES.new(key,AES.MODE_CBC,IV)
   header = b''
-
+  
+  decryptHeader = ''
   while True:
     chunk = clientSock.recv(segment_size)
-    if not chunk:
-      break
     if len(chunk) > 0:
       decryptedByteString = decryptor.decrypt(chunk)
-      decryptedString = decryptedByteString.decode("utf-8")
-      if ( (decryptedString.find(". .")) != -1):
+      decryptedString = decryptedByteString.decode("UTF-8") #decodes the bytestring segment into a string
+      print(decryptedByteString)
+      decryptHeader = decryptHeader + decryptedString
+      if (decryptHeader.find(". .") == -1):
         print("No delimiter detected") #DEBUG
-        header += decryptedByteString
+#        header += decryptedByteString
       else:
         print("Delimiter detected, removing padding from segment") #debug
-        header += decryptedString 
+        index = decryptHeader.find(". .") 
+        decryptHeader = decryptHeader[:index]
+        break
   
   #Header has been fully recieved, decrypted, + final padding removed
+
+  header_array = decryptHeader.split("\n")
   print(header_array)    #DEBUG STATMENT
-  header_array = header.split(b"\n")
-  COMMAND = (header_array[0]).decode(encoding='UTF-8')
-  FILENAME = (header_array[1]).decode(encoding='UTF-8')
+  COMMAND = (header_array[0])#.decode(encoding='UTF-8')
+  FILENAME = (header_array[1])#.decode(encoding='UTF-8')
 
   if COMMAND == "write":
-    fileSize = int( (header_array[2]).decode(encoding='UTF-8') )
-    getFileAes128(FILENAME,fileSize,clientSock)
+    fileSize = int(header_array[2])
+    bytes_written = 0
+    with open(FILENAME,"wb+") as f:
+      while(True):
+        data = clientSock.recv(segment_size)
+        if not data:
+          break
+        decryptedDataString = decryptor.decrypt(data)
+#        decryptedString = decryptedByteString.decode("utf-8")
+        bytes_written += len(data)
+        if(bytes_written > fileSize):
+          decryptedDataString = decryptedDataString[:fileSize % 16]
+        f.write(decryptedDataString)
+    f.close() 
 
   elif COMMAND == "read":
     sendFileAes128(FILENAME,clientSock)
