@@ -204,6 +204,10 @@ def sendHeaderNoEncrypt(COMMAND,FILENAME,clientSocket):
   clientSocket.send( header )
 
 def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
+
+  # NEED TO ADD A DELIMITER ON END OF DATA, similar to the header,
+  # the server getFileAes128 function needs to remove final padding
+  # and it's checking each 16 bytes for ". ." 
   global IV
   pad = lambda s: s + (segment_s - len(s) % segment_s) * str_to_bytes(chr(segment_s - len(s) % segment_s)) # This defines a pad function that can be called with pad(string)
   header = bytes(CIPHER + "\n" + IV + "\n","UTF-8")
