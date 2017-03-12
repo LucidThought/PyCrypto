@@ -229,7 +229,7 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
     key = hashlib.md5(PW.encode()).hexdigest() # Generates a 16-byte key from the given password
     encryptor = AES.new(key,AES.MODE_CBC,IV) # The encyptor keeps track of the IV as it changes form chunk to chunk
          
-    c_header = COMMAND + "\n" + FILENAME + "\n" + fileSize + "\n"  # The crypto header needs to be filled with the command, filename, and filesize 
+    c_header = COMMAND + "\n" + FILENAME + "\n" + fileSize + ". ."  # The crypto header needs to be filled with the command, filename, and filesize 
     pad(c_header)
     cryto_header = encryptor.encrypt(bytes(c_header,"UTF-8"))
     
