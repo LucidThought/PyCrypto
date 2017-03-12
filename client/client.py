@@ -224,7 +224,7 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
       fileSize += 1
     f.close()
     
-#  unpad = lambda s : s[0:-ord(s[-1])] # This defines an unpad function that can be called with unpad(decryptedString)
+#  unpad = lambda s : s[0:-ord(s[len-1:])] # This defines an unpad function that can be called with unpad(decryptedString)
   
   if(CIPHER=="aes128"): # This block reads from stdin in 16 byte segments, encrypts and sends them as they are read
     key = hashlib.md5(PW.encode()).hexdigest() # Generates a 16-byte key from the given password
