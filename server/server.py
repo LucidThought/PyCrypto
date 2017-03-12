@@ -8,6 +8,7 @@ from threading import Thread
 LISTEN = True
 SERVER_HOST = ''
 SERVER_PORT = 0
+PW = ''
 
 def start():
 
@@ -66,14 +67,12 @@ def client_connect(clientSock,client_ip,client_port):
       aes256EncryptionMode(segment_size, clientSock,client_ip)
 
 
-def aes128EncryptionMode(segment_size,clientSock,client_ip):
-  
-  print("decryption in aes128 not implemented yet")
-
-
 def aes256EncryptionMode(segment_size,clientSock,client_ip):
 
   print("decryption in aes128 not implemented yet")
+
+
+    
 
 
 def noEncryptionMode(segment_size, clientSock, client_ip):
@@ -99,6 +98,51 @@ def noEncryptionMode(segment_size, clientSock, client_ip):
    
     else:
       print( "command: "+command+ " not a valid command" )
+
+def aes128EncryptionMode(segment_size,clientSock,client_ip):
+  
+  key = hashlib.sha256(PW.encode()).hexdigest()
+  decryptor = AES.new(key,AES.MODE_CBC,IV)
+  header = b''
+
+  while True:
+    if not data:
+      break
+    if len(data) > 0:
+      chunk = clientSock.recv(segment_size)
+      decryptedByteString = decryptor.decrypt(chunk)
+      decryptedString = decryptedByteString.decode("utf-8")
+
+      if ( (decryptedString.find(". .")) != -1):
+        print("No delimiter detected") #DEBUG
+        header += decryptedByteString
+      else:
+        print("Delimiter detected, removing padding from segment") #debug
+        header += decryptedString 
+  
+  #Header has been fully recieved, decrypted, + final padding removed
+  print(header_array)    #DEBUG STATMENT
+  header_array = header.split(b"\n")
+  COMMAND = (header_array[0]).decode(encoding='UTF-8')
+  FILENAME = (header_array[1]).decode(encoding='UTF-8')
+
+  if COMMAND == "write":
+    fileSize = int( (header_array[2]).decode(encoding='UTF-8') )
+    getFileAes128(FILENAME,fileSize,clientSock)
+
+  elif COMMAND == "read":
+    sendFileAes128(FILENAME,clientSock)
+
+def getFileAes128(FILENAME,fileSize,clientSock):
+
+  rint("getFileAes128 not implemented")
+  key = hashlib.sha256(PW.encode()).hexdigest()
+  decryptor = AES.new(key,AES.MODE_CBC,IV)
+  data = b'' 
+  p
+
+def sendFileAes128(FILENAME,clientSock):
+  print("sendFileAes128 not implemented")
 
 
 def getFileNoEncryption(file_name,segment_size,clientSock):
