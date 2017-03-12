@@ -134,7 +134,6 @@ def aes128EncryptionMode(segment_size,clientSock,client_ip):
 
 def getFileAes128(FILENAME,fileSize,clientSock):
 
-  print("getFileAes128 not implemented fully")
   key = hashlib.sha256(PW.encode()).hexdigest()
   decryptor = AES.new(key,AES.MODE_CBC,IV)
   data = b''
@@ -157,8 +156,8 @@ def getFileAes128(FILENAME,fileSize,clientSock):
         else:
           print("Delimiter detected, removing padding from segment") #debug
           f.write(decryptedString)  ## NEED TO REMOVE PADDING
+          #ALSO need to remove delimiter if it's present??
           bytes_written += len(data)
-  #ALL DATA HAS BEEN RECIEVED
   f.close() 
 
 def sendFileAes128(FILENAME,clientSock):
