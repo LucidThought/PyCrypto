@@ -88,26 +88,21 @@ def noEncryptionMode(segment_size, clientSock, client_ip):
     print("Filename: " + file_name)      # DEBUGGING
       
     if command == "write":
-      
       print("Attempting to upload file: "+file_name+" to server from: " + client_ip)
       getFileNoEncryption(file_name,segment_size,clientSock)
-      
     elif command == "read":
-
-      print("client is in read mode")
-      sendFileNoEncryption(file_name,cipher,clientSock)
-   
+      sendFileNoEncryption(file_name,clientSock)
     else:
       print( "command: "+command+ " not a valid command" )
 
 def getFileNoEncryption(file_name,segment_size,clientSock):
   
   buffSize = segment_size
-  #get file size header from client, delmited with ". ."
+
   file_header = clientSock.recv(segment_size)
   header_array = file_header.split(b". .")
 
-  file_size = int(header_array[0]) ##extract the file size from header
+  file_size = int(header_array[0])
   bytes_written = 0
   
   #CREATE THE FILE ON THE SERVER, WILL OVERWRITE IF EXISTS
@@ -118,14 +113,13 @@ def getFileNoEncryption(file_name,segment_size,clientSock):
         break
       if len(data) + bytes_written > file_size:
         data = data[:file_size-bytes_written]
-      ##append
       f.write(data)
       bytes_written += len(data)
   f.close()
   print("file: "+file_name+" successfully uploaded to server") 
   
  
-def sendFileNoEncryption(file_name,cipher,clientSock):
+def sendFileNoEncryption(file_name,clientSock):
 
   print("server is in getFile mode")
   print(file_name)
