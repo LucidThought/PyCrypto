@@ -209,7 +209,7 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
   header = bytes(CIPHER + "\n" + IV + "\n","UTF-8")
   padding = 1024 - len(header)
   padded_header = bytes(header,'UTF-8') + struct.pack(str(padding)+"B",*([0]*padding))
-#  padded_header = pad(header)
+
   clientSocket.send(padded_header) # Send crypto header, containing crypto mode and IV
 # The following code counts the size of the file it is about to send
   fileize = 0
