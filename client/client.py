@@ -262,17 +262,26 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
           clientSocket.send(encrypted)
 
   elif(CIPHER=="aes256"): # This block reads from stdin in 16 byte segments, encrypts and sends them as they are read
-    key = hashlib.sha256(PW.encode()).hexdigest() # Generates a 32-byte key from the given password
+    key = hashlib.sha256(PW.encode()).digest() # Generates a 32-byte key from the given password
     encryptor = AES.new(key,AES.MODE_CBC,IV) # The encyptor keeps track of the IV as it changes form chunk to chunk
+
+    c_header = COMMAND + "\n" + FILENAME + "\n" + str(fileSize) + ". ."  # The crypto header needs to be filled with the command, filename, and filesize 
+    crypt_header = pad(c_header)
+    crypto_header = encryptor.encrypt(crypt_header.encode("UTF-8"))
+    clientSocket.send(crypto_header)
+
     with open(tempFile,'rb') as inload:
       while(True):
         chunk = inload.read(segment_s)
         if(len(chunk)==0):
           break
         elif(len(chunk) % 16 != 0):
-          chunk += bytes(' ' * (16 - len(chunk) % 16))
-        encrypted = encryptor.encrypt(chunk)
-        clientSocket.send(encrypted)
+          dchunk = str(chunk)
+          dchunk += ' ' * (16 - len(chunk) % 16)
+          chunk = dchunk.encode()
+        if(len(chunk) % 16 == 0):
+          encrypted = encryptor.encrypt(chunk)
+          clientSocket.send(encrypted)
     
 #def recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
 

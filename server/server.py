@@ -73,15 +73,7 @@ def client_connect(clientSock,client_ip,client_port):
     #AES 256 (16 byte blocks)
     elif cipher == "aes256":
       segment_size = 16
-      aes256EncryptionMode(segment_size, clientSock,client_ip)
-
-
-def aes256EncryptionMode(segment_size,clientSock,client_ip):
-
-  print("decryption in aes128 not implemented yet")
-
-
-    
+      aes256EncryptionMode(IV, segment_size, clientSock,client_ip)
 
 
 def noEncryptionMode(segment_size, clientSock, client_ip):
@@ -107,88 +99,6 @@ def noEncryptionMode(segment_size, clientSock, client_ip):
    
     else:
       print( "command: "+command+ " not a valid command" )
-
-def aes128EncryptionMode(IV, segment_size,clientSock,client_ip):
-  global PW
-  
-  key = hashlib.md5(PW.encode()).hexdigest()
-  decryptor = AES.new(key,AES.MODE_CBC,IV)
-  header = b''
-  
-  decryptHeader = ''
-  while True:
-    chunk = clientSock.recv(segment_size)
-    if len(chunk) > 0:
-      decryptedByteString = decryptor.decrypt(chunk)
-      decryptedString = decryptedByteString.decode("UTF-8") #decodes the bytestring segment into a string
-      print(decryptedByteString)
-      decryptHeader = decryptHeader + decryptedString
-      if (decryptHeader.find(". .") == -1):
-        print("No delimiter detected") #DEBUG
-#        header += decryptedByteString
-      else:
-        print("Delimiter detected, removing padding from segment") #debug
-        index = decryptHeader.find(". .") 
-        decryptHeader = decryptHeader[:index]
-        break
-  
-  #Header has been fully recieved, decrypted, + final padding removed
-
-  header_array = decryptHeader.split("\n")
-  print(header_array)    #DEBUG STATMENT
-  COMMAND = (header_array[0])#.decode(encoding='UTF-8')
-  FILENAME = (header_array[1])#.decode(encoding='UTF-8')
-
-  if COMMAND == "write":
-    fileSize = int(header_array[2])
-    bytes_written = 0
-    with open(FILENAME,"wb+") as f:
-      while(True):
-        data = clientSock.recv(segment_size)
-        if not data:
-          break
-        decryptedDataString = decryptor.decrypt(data)
-#        decryptedString = decryptedByteString.decode("utf-8")
-        bytes_written += len(data)
-        if(bytes_written > fileSize):
-          decryptedDataString = decryptedDataString[:fileSize % 16]
-        f.write(decryptedDataString)
-    f.close() 
-
-  elif COMMAND == "read":
-    sendFileAes128(FILENAME,clientSock)
-
-def getFileAes128(FILENAME,fileSize,clientSock):
-
-  key = hashlib.sha256(PW.encode()).hexdigest()
-  decryptor = AES.new(key,AES.MODE_CBC,IV)
-  data = b''
-  bytes_written = 0  
-
-  with open(FILENAME,"wb+") as f:
-    while(bytes_written < fileSize):
-      data = clientSock.recv(segment_size)
-      if not data:
-        break
-      if len(data) + bytes_written > fileSize:
-        data = data[:fileSize-bytes_written]
-        decryptedDataString = decryptor.decrypt(data)
-        decryptedString = decryptedByteString.decode("utf-8")
-
-        if ( (decryptedString.find(". .")) != -1):
-          print("No delimiter detected") #DEBUG
-          f.write(decryptedByteString)
-          bytes_written += len(data)
-        else:
-          print("Delimiter detected, removing padding from segment") #debug
-          f.write(decryptedString)  ## NEED TO REMOVE PADDING
-          #ALSO need to remove delimiter if it's present??
-          bytes_written += len(data)
-  f.close() 
-
-def sendFileAes128(FILENAME,clientSock):
-  print("sendFileAes128 not implemented")
-
 
 def getFileNoEncryption(file_name,segment_size,clientSock):
   
@@ -235,6 +145,134 @@ def sendFileNoEncryption(file_name,cipher,clientSock):
     print("file sent")
     #clientSock.close() 
   infile.close()
+
+
+def aes128EncryptionMode(IV, segment_size,clientSock,client_ip):
+  global PW
+  
+  key = hashlib.md5(PW.encode()).hexdigest()
+  decryptor = AES.new(key,AES.MODE_CBC,IV)
+  header = b''
+  
+  decryptHeader = ''
+  while True:
+    chunk = clientSock.recv(segment_size)
+    if len(chunk) > 0:
+      decryptedByteString = decryptor.decrypt(chunk)
+      decryptedString = decryptedByteString.decode("UTF-8") #decodes the bytestring segment into a string
+#      print(decryptedByteString)
+      decryptHeader = decryptHeader + decryptedString
+      if (decryptHeader.find(". .") == -1):
+        print("No delimiter detected") #DEBUG
+      else:
+        print("Delimiter detected, removing padding from segment") #debug
+        index = decryptHeader.find(". .") 
+        decryptHeader = decryptHeader[:index]
+        break
+  
+  #Header has been fully recieved, decrypted, + final padding removed
+  header_array = decryptHeader.split("\n")
+  print(header_array)    #DEBUG STATMENT
+  COMMAND = (header_array[0])#.decode(encoding='UTF-8')
+  FILENAME = (header_array[1])#.decode(encoding='UTF-8')
+
+  if COMMAND == "write":
+    fileSize = int(header_array[2])
+    bytes_written = 0
+    with open(FILENAME,"wb+") as f:
+      while(True):
+        data = clientSock.recv(segment_size)
+        if not data:
+          break
+        decryptedDataString = decryptor.decrypt(data)
+#        decryptedString = decryptedByteString.decode("utf-8")
+        bytes_written += len(data)
+        if(bytes_written > fileSize):
+          decryptedDataString = decryptedDataString[:fileSize % 16]
+        f.write(decryptedDataString)
+    f.close() 
+  elif COMMAND == "read":
+    sendFileAes128(FILENAME,clientSock)
+
+def aes256EncryptionMode(IV, segment_size,clientSock,client_ip):
+  global PW
+  
+  key = hashlib.sha256(PW.encode()).digest()
+  decryptor = AES.new(key,AES.MODE_CBC,IV)
+  header = b''
+  
+  decryptHeader = ''
+  while True:
+    chunk = clientSock.recv(segment_size)
+    if len(chunk) > 0:
+      decryptedByteString = decryptor.decrypt(chunk)
+      decryptedString = decryptedByteString.decode("UTF-8") #decodes the bytestring segment into a string
+#      print(decryptedByteString)
+      decryptHeader = decryptHeader + decryptedString
+      if (decryptHeader.find(". .") == -1):
+        print("No delimiter detected") #DEBUG
+      else:
+        print("Delimiter detected, removing padding from segment") #debug
+        index = decryptHeader.find(". .") 
+        decryptHeader = decryptHeader[:index]
+        break
+  
+  #Header has been fully recieved, decrypted, + final padding removed
+  header_array = decryptHeader.split("\n")
+  print(header_array)    #DEBUG STATMENT
+  COMMAND = (header_array[0])#.decode(encoding='UTF-8')
+  FILENAME = (header_array[1])#.decode(encoding='UTF-8')
+
+  if COMMAND == "write":
+    fileSize = int(header_array[2])
+    bytes_written = 0
+    with open(FILENAME,"wb+") as f:
+      while(True):
+        data = clientSock.recv(segment_size)
+        if not data:
+          break
+        decryptedDataString = decryptor.decrypt(data)
+#        decryptedString = decryptedByteString.decode("utf-8")
+        bytes_written += len(data)
+        if(bytes_written > fileSize):
+          decryptedDataString = decryptedDataString[:fileSize % 16]
+        f.write(decryptedDataString)
+    f.close() 
+  elif COMMAND == "read":
+    sendFileAes128(FILENAME,clientSock)
+
+def getFileAes128(FILENAME,fileSize,clientSock):
+
+  key = hashlib.sha256(PW.encode()).hexdigest()
+  decryptor = AES.new(key,AES.MODE_CBC,IV)
+  data = b''
+  bytes_written = 0  
+
+  with open(FILENAME,"wb+") as f:
+    while(bytes_written < fileSize):
+      data = clientSock.recv(segment_size)
+      if not data:
+        break
+      if len(data) + bytes_written > fileSize:
+        data = data[:fileSize-bytes_written]
+        decryptedDataString = decryptor.decrypt(data)
+        decryptedString = decryptedByteString.decode("utf-8")
+
+        if ( (decryptedString.find(". .")) != -1):
+          print("No delimiter detected") #DEBUG
+          f.write(decryptedByteString)
+          bytes_written += len(data)
+        else:
+          print("Delimiter detected, removing padding from segment") #debug
+          f.write(decryptedString)  ## NEED TO REMOVE PADDING
+          #ALSO need to remove delimiter if it's present??
+          bytes_written += len(data)
+  f.close() 
+
+def sendFileAes128(FILENAME,clientSock):
+  print("sendFileAes128 not implemented")
+
+
 
 if __name__ == "__main__":
   start()
