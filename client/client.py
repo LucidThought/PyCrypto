@@ -311,17 +311,18 @@ def recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
       sys.exit("File does not exist")
 
     bytes_written = 0
-    while(True):
+    while(bytes_written < fileSize):
       data = clientSocket.recv(segment_s)
       if not data:
         break
       decryptedData = decryptor.decrypt(data)
+      #bytes_written += len(data)
+      if len(data) + bytes_written > fileSize:
+      #if(bytes_written > fileSize):
+        decryptedData = decryptedData[:fileSize - segment_s]
       bytes_written += len(data)
-      if(bytes_written > fileSize):
-        decryptedData = decryptedData[:fileSize % segment_s]
       sys.stdout.buffer.write(decryptedData)
-    sys.exit("File Received")
-
+  
 
   elif(CIPHER == "aes256"):
     key = hashlib.sha256(PW.encode()).digest()

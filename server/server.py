@@ -246,17 +246,16 @@ def sendFileAes128(key, IV, segment_size, FILENAME,clientSock):
   crypt_header = pad(c_header)
   crypto_header = encryptor.encrypt(crypt_header.encode("UTF-8"))
   clientSock.send(crypto_header)
-  
+
   with open(FILENAME,'rb') as rfile:
-    while(True):
-      chunk = rfile.read(segment_size)
-      if not chunk:
-        break
-      elif(len(chunk) % segment_size != 0):
+    chunk = rfile.read(segment_size)
+    while(chunk):
+      if(len(chunk) % segment_size != 0):
         dchunk = b'\x00' * (segment_size - len(chunk) % segment_size)
         chunk = b"".join([chunk,dchunk])
       oChunk = encryptor.encrypt(chunk)
       clientSock.send(oChunk)
+      chunk = rfile.read(segment_size)
   rfile.close()
 
 def sendFileAes256(key, IV, segment_size, FILENAME,clientSock):
