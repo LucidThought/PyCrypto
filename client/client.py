@@ -313,9 +313,9 @@ def recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
           index = decryptHeader.find(". .") 
           decryptHeader = decryptHeader[:index]
           break
-    header_array = decryptedHeader.split("\n")
+    header_array = decryptHeader.split("\n")
     verify = header_array[0]
-    sizeHeader = header_array[1]
+    sizeHeader = int(header_array[1])
 
     if(verify == "False"):
       sys.exit("File does not exist")
@@ -354,6 +354,7 @@ def recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
       bytes_written += segment_s
       if(bytes_written > ruHeader):
         decryptedData = decryptedData[:ruHeader % segment_s]
+        sys.stdout.buffer.write(decryptedData)
       sys.stdout.buffer.write(decryptedData)
 
 if __name__ == '__main__':
