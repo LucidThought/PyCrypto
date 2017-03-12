@@ -186,11 +186,11 @@ def aes128EncryptionMode(IV, segment_size,clientSock,client_ip):
         decryptedDataString = decryptor.decrypt(data)
         bytes_written += len(data)
         if(bytes_written > fileSize):
-          decryptedDataString = decryptedDataString[:fileSize % 16]
+          decryptedDataString = decryptedDataString[:fileSize % segment_size]
         f.write(decryptedDataString)
     f.close() 
   elif COMMAND == "read":
-    sendFileAes128(FILENAME,clientSock)
+    sendFileAes128(key, IV, segment_size, FILENAME,clientSock)
 
 def aes256EncryptionMode(IV, segment_size,clientSock,client_ip):
   global PW
@@ -231,16 +231,38 @@ def aes256EncryptionMode(IV, segment_size,clientSock,client_ip):
         decryptedDataString = decryptor.decrypt(data)
         bytes_written += len(data)
         if(bytes_written > fileSize):
-          decryptedDataString = decryptedDataString[:fileSize % 16]
+          decryptedDataString = decryptedDataString[:fileSize % segment_size]
         f.write(decryptedDataString)
     f.close() 
   elif COMMAND == "read":
-    sendFileAes256(FILENAME,clientSock) 
+    sendFileAes256(key, IV, segment_size, FILENAME,clientSock) 
 
-def sendFileAes128(FILENAME,clientSock):
-  print("sendFileAes128 not implemented")
+def sendFileAes128(key, IV, segment_size, FILENAME,clientSock):
+  global PW
+  pad = lambda s: s + (segment_size - len(s) % segment_size) * chr(segment_size - len(s) % segment_size) # This defines a pad function that can be called with pad(string)
+  encryptor = AES.new(key,AES.MODE_CBC,IV)
+  decryptor = AES.new(key,AES.MODE_CBC,IV)
+  verify = "True"
+  try:
+    file_size = os.path.getsize(FILENAME)
+  except:
+    print("Requested file does not exist")
+    verify = "False"
+  c_header = verify + "\n"  + str(file_size) + ". ."  # The crypto header needs to be filled with the command, filename, and filesize 
+  crypt_header = pad(c_header)
+  crypto_header = encryptor.encrypt(crypt_header.encode("UTF-8"))
+  clientSock.send(crypto_header)
+  
+  with open(FILENAME,'rb') as rfile:
+    while(True):
+      chunk = rfile.read(16)
+      print(len(chunk))
+      if not chunk:
+        break
+      oChunk = encryptor.encrypt(chunk)
+      clientSock.send(oChunk)
 
-def sendFileAes256(FILENAME,clientSock):
+def sendFileAes256(key, IV, segment_size, FILENAME,clientSock):
   print("sendFileAes256 not implemented")
 
 if __name__ == "__main__":

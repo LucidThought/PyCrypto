@@ -72,7 +72,7 @@ def main():
       clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       clientSocket.connect((ipDEST,int(sockDEST)))
 
-      recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, 16, clientSocket):
+      recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, 16, clientSocket)
     else:
       sys.exit("Unsupported Cryptography Cipher")
   elif(COMMAND=="write"):
@@ -282,6 +282,7 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
 def recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
   global IV
   pad = lambda s: s + (segment_s - len(s) % segment_s) * chr(segment_s - len(s) % segment_s) # This defines a pad function that can be called with pad(string)
+  unpad = lambda s : s[0:-ord(s[len-1:])] # This defines an unpad function that can be called with unpad(decryptedString)
   cheader = CIPHER + "\n" 
   padding = 1024 - len(cheader)
   padded_header = bytes(cheader,'UTF-8') + struct.pack(str(padding)+"B",*([0]*padding))
@@ -290,21 +291,70 @@ def recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
 
   if(CIPHER == "aes128"):
     key = hashlib.md5(PW.encode()).hexdigest()
+    encryptor = AES.new(key,AES.MODE_CBC,IV)
+    decryptor = AES.new(key,AES.MODE_CBC,IV)
 
     c_header = COMMAND + "\n" + FILENAME + "\n" + str(128) + ". ."  # The crypto header needs to be filled with the command, filename, and filesize 
     crypt_header = pad(c_header)
     crypto_header = encryptor.encrypt(crypt_header.encode("UTF-8"))
     clientSocket.send(crypto_header)
 
+    decryptHeader = ''
+    while True:
+      chunk = clientSocket.recv(segment_s)
+      if len(chunk) > 0:
+        decryptedByteString = decryptor.decrypt(chunk)
+        decryptedString = decryptedByteString.decode("UTF-8") #decodes the bytestring segment into a string
+        decryptHeader = decryptHeader + decryptedString
+        if (decryptHeader.find(". .") == -1):
+          print("No delimiter detected") #DEBUG
+        else:
+          print("Delimiter detected, removing padding from segment") #debug
+          index = decryptHeader.find(". .") 
+          decryptHeader = decryptHeader[:index]
+          break
+    header_array = decryptedHeader.split("\n")
+    verify = header_array[0]
+    sizeHeader = header_array[1]
+
+    if(verify == "False"):
+      sys.exit("File does not exist")
+
+    bytes_written = 0
+    while(True):
+      data = clientSocket.recv(segment_s)
+      if not data:
+        break
+      decryptedData = decryptor.decrypt(data)
+      bytes_written += segment_s
+      if(bytes_written > sizeHeader):
+        decryptedData = decryptedData[:sizeHeader % segment_s]
+      sys.stdout.buffer.write(decryptedData)
+
 
   elif(CIPHER == "aes256"):
     key = hashlib.sha256(PW.encode()).digest()
+    encryptor = AES.new(key,AES.MODE_CBC,IV)
+    decryptor = AES.new(key,AES.MODE_CBC,IV)
 
     c_header = COMMAND + "\n" + FILENAME + "\n" + str(256) + ". ."  # The crypto header needs to be filled with the command, filename, and filesize 
     crypt_header = pad(c_header)
     crypto_header = encryptor.encrypt(crypt_header.encode("UTF-8"))
     clientSocket.send(crypto_header)
 
+    rcHeader = clientSocket.recv(segment_s)
+    ruHeader = int(decryptor.decrypt(rcHeader))
+
+    bytes_written = 0
+    while(True):
+      data = clientSocket.recv(segment_s)
+      if not data:
+        break
+      decryptedData = decryptor.decrypt(data)
+      bytes_written += segment_s
+      if(bytes_written > ruHeader):
+        decryptedData = decryptedData[:ruHeader % segment_s]
+      sys.stdout.buffer.write(decryptedData)
 
 if __name__ == '__main__':
   main()
