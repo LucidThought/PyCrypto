@@ -62,7 +62,7 @@ def main():
       FILENAME = str(sys.argv[2])
       DEST = str(argv[3])
       CIPHER = 'none'
-  print("test2")
+
   # The following code block is used to parse the user input and execute the appropriate functions
   if(COMMAND=="read"):
     if(CIPHER=="none"):
@@ -223,7 +223,7 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
 # The following code counts the size of the file it is about to send
   fileSize = 0
   tempFile = "temp_dat"
-  print("test")
+
   with open(tempFile,'wb+') as f:
     while(True):
       chunk = sys.stdin.buffer.read(1)
