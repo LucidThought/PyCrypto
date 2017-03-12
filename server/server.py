@@ -253,12 +253,10 @@ def sendFileAes128(key, IV, segment_size, FILENAME,clientSock):
       if not chunk:
         break
       elif(len(chunk) % segment_size != 0):
-        dchunk = str(chunk)
-        dchunk += ' ' * (segment_size - len(chunk) % segment_size)
-        chunk = dchunk.encode()
-      if(len(chunk) % segment_size == 0):
-        oChunk = encryptor.encrypt(chunk)
-        clientSock.send(oChunk)
+        dchunk = b'\x00' * (segment_size - len(chunk) % segment_size)
+        chunk = b"".join([chunk,dchunk])
+      oChunk = encryptor.encrypt(chunk)
+      clientSock.send(oChunk)
   rfile.close()
 
 def sendFileAes256(key, IV, segment_size, FILENAME,clientSock):

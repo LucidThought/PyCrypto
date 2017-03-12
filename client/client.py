@@ -244,10 +244,10 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
         chunk = inload.read(segment_s)
         if(len(chunk)==0):
           break
-        elif(len(chunk) % 16 != 0):
-          dchunk = b'\x00' * (16 - len(chunk) % 16)
+        elif(len(chunk) % segment_s != 0):
+          dchunk = b'\x00' * (segment_s - len(chunk) % 16)
           chunk = b"".join([chunk,dchunk])
-        if(len(chunk) % 16 == 0):
+        if(len(chunk) % segment_s == 0):
           encrypted = encryptor.encrypt(chunk)
           clientSocket.send(encrypted)
 
@@ -310,18 +310,17 @@ def recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
     if(verify == "False"):
       sys.exit("File does not exist")
 
-    data = "d"
     bytes_written = 0
     while(True):
+      data = clientSocket.recv(segment_s)
       if not data:
         break
-      data = clientSocket.recv(segment_s)
       decryptedData = decryptor.decrypt(data)
       bytes_written += len(data)
       if(bytes_written > fileSize):
         decryptedData = decryptedData[:fileSize % segment_s]
       sys.stdout.buffer.write(decryptedData)
-#    sys.exit("File Received")
+    sys.exit("File Received")
 
 
   elif(CIPHER == "aes256"):
@@ -347,7 +346,7 @@ def recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
       if(bytes_written > ruHeader):
         decryptedData = decryptedData[:ruHeader % segment_s]
         sys.stdout.buffer.write(decryptedData)
-      sys.stdout.buffer.write(decryptedData[:4] + "\n")
+      sys.stdout.buffer.write(decryptedData)
 
 if __name__ == '__main__':
   main()
