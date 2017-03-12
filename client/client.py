@@ -96,6 +96,7 @@ def startClientNone():
   global COMMAND
   global DEST
   global FILE
+  global IV
   separator = DEST.find(":")
   ipDEST = DEST[0:separator]
   sockDEST = DEST[separator+1:]
@@ -160,6 +161,7 @@ def startClientNone():
     # i.e. input_chunk + struct.pack('50B',*([0]*50)) --> appends 50 bytes of 0 padding
     padded_message = bytes(first_message,'UTF-8') + struct.pack(padding_arg1,*([0]*padding))
     clientSocket.send(padded_message)
+    clientSocket.send(IV)
     print("Hi server --> sending cipher + IV(nonce) + padding: "+ str(len(padded_message))+" bytes")
 
     if CIPHER == "none":
