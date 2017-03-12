@@ -65,14 +65,14 @@ def main():
   # The following code block is used to parse the user input and execute the appropriate functions
   if(COMMAND=="read"):
     if(CIPHER=="none"):
-       print("not yet implemented")
+       startClientNone()
     elif(CIPHER=="aes128") or (CIPHER=="aes265"):
        print("not yet implemented")
     else:
       sys.exit("Unsupported Cryptography Cipher")
   elif(COMMAND=="write"):
     if(CIPHER=="none"):
-       print("not yet implemented")
+       startClientNone()
     elif(CIPHER=="aes128") or (CIPHER=="aes265"):
       separator = DEST.find(":")
       ipDEST = DEST[0:separator]
