@@ -33,6 +33,8 @@ def main():
 #  print(Random.new().read(AES.block_size))
 
   IV = Random.new().read(AES.block_size)  # This generates a random IV
+  print(str(IV))
+  print(len(IV))
 
   if (len(sys.argv) < 4):
     print("Use this application with the following:")
@@ -60,21 +62,15 @@ def main():
       FILENAME = str(sys.argv[2])
       DEST = str(argv[3])
       CIPHER = 'none'
-
   # The following code block is used to parse the user input and execute the appropriate functions
   if(COMMAND=="read"):
     if(CIPHER=="none"):
        startClientNone()
     elif(CIPHER=="aes128") or (CIPHER=="aes256"):
-      separator = DEST.find(":")
-      ipDEST = DEST[0:separator]
-      sockDEST = DEST[separator+1:]
-      clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-      clientSocket.connect((ipDEST,int(sockDEST)))
-
-      recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, 16, clientSocket)
+       print("not yet implemented")
     else:
       sys.exit("Unsupported Cryptography Cipher")
+
   elif(COMMAND=="write"):
     if(CIPHER=="none"):
        startClientNone()
@@ -180,9 +176,11 @@ def sendFileNoEncryption(payload_file,segment_size,clientSocket):
   global DEST
   global FILENAME
  
-  #Send header before payload
+  #Send request header to the server
   sendHeaderNoEncrypt(COMMAND,FILENAME,clientSocket)
-    
+  
+  #Now start sending the payload, append payload_size
+  #on first 1024 byte segment to the server
   with open(payload_file,'rb') as f:
     
     # Get payload size, and send to server so it knows how much data to recieve
@@ -199,21 +197,27 @@ def sendFileNoEncryption(payload_file,segment_size,clientSocket):
     f.close()
 
 def sendHeaderNoEncrypt(COMMAND,FILENAME,clientSocket):
+
   header = bytes(COMMAND+"\n"+FILENAME+"\n","UTF-8")
   clientSocket.send( header )
 
 def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
+
+  # NEED TO ADD A DELIMITER ON END OF DATA, similar to the header,
+  # the server getFileAes128 function needs to remove final padding
+  # and it's checking each 16 bytes for ". ." 
   global IV
   pad = lambda s: s + (segment_s - len(s) % segment_s) * chr(segment_s - len(s) % segment_s) # This defines a pad function that can be called with pad(string)
-  cheader = CIPHER + "\n" 
+  cheader = CIPHER + "\n" #+ IV + "\n"
   padding = 1024 - len(cheader)
   padded_header = bytes(cheader,'UTF-8') + struct.pack(str(padding)+"B",*([0]*padding))
-  clientSocket.send(padded_header) # Send crypto header, containing crypto mode
-  clientSocket.send(IV)
 
+  clientSocket.send(padded_header) # Send crypto header, containing crypto mode and IV
+  clientSocket.send(IV)
 # The following code counts the size of the file it is about to send
   fileSize = 0
   tempFile = "temp_dat"
+  print("test")
   with open(tempFile,'wb+') as f:
     while(True):
       chunk = sys.stdin.buffer.read(1)
@@ -221,8 +225,8 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
         break
       f.write(chunk)
       fileSize += 1
-    f.close() 
-
+    f.close()
+    
 #  unpad = lambda s : s[0:-ord(s[len-1:])] # This defines an unpad function that can be called with unpad(decryptedString)
   
   if(CIPHER=="aes128"): # This block reads from stdin in 16 byte segments, encrypts and sends them as they are read
@@ -252,105 +256,22 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
           clientSocket.send(encrypted)
 
   elif(CIPHER=="aes256"): # This block reads from stdin in 16 byte segments, encrypts and sends them as they are read
-    key = hashlib.sha256(PW.encode()).digest() # Generates a 32-byte key from the given password
+    key = hashlib.sha256(PW.encode()).hexdigest() # Generates a 32-byte key from the given password
     encryptor = AES.new(key,AES.MODE_CBC,IV) # The encyptor keeps track of the IV as it changes form chunk to chunk
-
-    c_header = COMMAND + "\n" + FILENAME + "\n" + str(fileSize) + ". ."  # The crypto header needs to be filled with the command, filename, and filesize 
-    crypt_header = pad(c_header)
-    crypto_header = encryptor.encrypt(crypt_header.encode("UTF-8"))
-    clientSocket.send(crypto_header)
-
     with open(tempFile,'rb') as inload:
       while(True):
         chunk = inload.read(segment_s)
         if(len(chunk)==0):
           break
         elif(len(chunk) % 16 != 0):
-          dchunk = str(chunk)
-          dchunk += ' ' * (16 - len(chunk) % 16)
-          chunk = dchunk.encode()
-        if(len(chunk) % 16 == 0):
-          encrypted = encryptor.encrypt(chunk)
-          clientSocket.send(encrypted)
+          chunk += bytes(' ' * (16 - len(chunk) % 16))
+        encrypted = encryptor.encrypt(chunk)
+        clientSocket.send(encrypted)
     
-def recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
-  global IV
-  pad = lambda s: s + (segment_s - len(s) % segment_s) * chr(segment_s - len(s) % segment_s) # This defines a pad function that can be called with pad(string)
-  unpad = lambda s : s[0:-ord(s[len-1:])] # This defines an unpad function that can be called with unpad(decryptedString)
-  cheader = CIPHER + "\n" 
-  padding = 1024 - len(cheader)
-  padded_header = bytes(cheader,'UTF-8') + struct.pack(str(padding)+"B",*([0]*padding))
-  clientSocket.send(padded_header) # Send crypto header, containing crypto mode
-  clientSocket.send(IV)
-
-  if(CIPHER == "aes128"):
-    key = hashlib.md5(PW.encode()).hexdigest()
-    encryptor = AES.new(key,AES.MODE_CBC,IV)
-    decryptor = AES.new(key,AES.MODE_CBC,IV)
-
-    c_header = COMMAND + "\n" + FILENAME + "\n" + str(128) + ". ."  # The crypto header needs to be filled with the command, filename, and filesize 
-    crypt_header = pad(c_header)
-    crypto_header = encryptor.encrypt(crypt_header.encode("UTF-8"))
-    clientSocket.send(crypto_header)
-
-    decryptHeader = ''
-    while True:
-      chunk = clientSocket.recv(segment_s)
-      if len(chunk) > 0:
-        decryptedByteString = decryptor.decrypt(chunk)
-        decryptedString = decryptedByteString.decode("UTF-8") #decodes the bytestring segment into a string
-        decryptHeader = decryptHeader + decryptedString
-        if (decryptHeader.find(". .") == -1):
-          print("No delimiter detected") #DEBUG
-        else:
-          print("Delimiter detected, removing padding from segment") #debug
-          index = decryptHeader.find(". .") 
-          decryptHeader = decryptHeader[:index]
-          break
-    header_array = decryptHeader.split("\n")
-    verify = header_array[0]
-    sizeHeader = int(header_array[1])
-
-    if(verify == "False"):
-      sys.exit("File does not exist")
-
-    bytes_written = 0
-    while(True):
-      data = clientSocket.recv(segment_s)
-      if not data:
-        break
-      decryptedData = decryptor.decrypt(data)
-      bytes_written += segment_s
-      if(bytes_written > sizeHeader):
-        decryptedData = decryptedData[:sizeHeader % segment_s]
-      sys.stdout.buffer.write(decryptedData)
-
-
-  elif(CIPHER == "aes256"):
-    key = hashlib.sha256(PW.encode()).digest()
-    encryptor = AES.new(key,AES.MODE_CBC,IV)
-    decryptor = AES.new(key,AES.MODE_CBC,IV)
-
-    c_header = COMMAND + "\n" + FILENAME + "\n" + str(256) + ". ."  # The crypto header needs to be filled with the command, filename, and filesize 
-    crypt_header = pad(c_header)
-    crypto_header = encryptor.encrypt(crypt_header.encode("UTF-8"))
-    clientSocket.send(crypto_header)
-
-    rcHeader = clientSocket.recv(segment_s)
-    ruHeader = int(decryptor.decrypt(rcHeader))
-
-    bytes_written = 0
-    while(True):
-      data = clientSocket.recv(segment_s)
-      if not data:
-        break
-      decryptedData = decryptor.decrypt(data)
-      bytes_written += segment_s
-      if(bytes_written > ruHeader):
-        decryptedData = decryptedData[:ruHeader % segment_s]
-        sys.stdout.buffer.write(decryptedData)
-      sys.stdout.buffer.write(decryptedData)
+#def recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
 
 if __name__ == '__main__':
+#  print(str(hashlib.sha256(str_to_bytes("test")).digest()))
+#  print(str(Random.new().read(AES.block_size)))
   main()
-
+#  startClientNone()
