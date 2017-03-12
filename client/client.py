@@ -47,33 +47,32 @@ def main():
     CIPHER = 'none'
 
   else:
-    if(len(sys.argv)==5):
+    if(len(sys.argv)==6):
       COMMAND = str(sys.argv[1])
       FILENAME = str(sys.argv[2])
       DEST = str(sys.argv[3])
       CIPHER = str(sys.argv[4])
       PW = str(sys.argv[5])
       print("Password: " + PW)
-      KEY = hashlib.sha256(str_to_bytes(PW)).hexdigest()
 
     elif(len(sys.argv)==4):
       COMMAND = str(sys.argv[1])
       FILENAME = str(sys.argv[2])
       DEST = str(argv[3])
       CIPHER = 'none'
-
+  print("test2")
   # The following code block is used to parse the user input and execute the appropriate functions
   if(COMMAND=="read"):
     if(CIPHER=="none"):
        startClientNone()
-    elif(CIPHER=="aes128") or (CIPHER=="aes265"):
+    elif(CIPHER=="aes128") or (CIPHER=="aes256"):
        print("not yet implemented")
     else:
       sys.exit("Unsupported Cryptography Cipher")
   elif(COMMAND=="write"):
     if(CIPHER=="none"):
        startClientNone()
-    elif(CIPHER=="aes128") or (CIPHER=="aes265"):
+    elif(CIPHER=="aes128") or (CIPHER=="aes256"):
       separator = DEST.find(":")
       ipDEST = DEST[0:separator]
       sockDEST = DEST[separator+1:]
@@ -206,24 +205,26 @@ def sendHeaderNoEncrypt(COMMAND,FILENAME,clientSocket):
 
 def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
   global IV
-  pad = lambda s: s + (segment_s - len(s) % segment_s) * chr(segment_s - len(s) % segment_s) # This defines a pad function that can be called with pad(string)
+  pad = lambda s: s + (segment_s - len(s) % segment_s) * str_to_bytes(chr(segment_s - len(s) % segment_s)) # This defines a pad function that can be called with pad(string)
   header = bytes(CIPHER + "\n" + IV + "\n","UTF-8")
   padding = 1024 - len(header)
   padded_header = bytes(header,'UTF-8') + struct.pack(str(padding)+"B",*([0]*padding))
+
   clientSocket.send(padded_header) # Send crypto header, containing crypto mode and IV
 # The following code counts the size of the file it is about to send
-  fileize = 0
+  fileSize = 0
   tempFile = "temp_dat"
+  print("test")
   with open(tempFile,'wb+') as f:
     while(True):
-      chunk = stdin.buffer.read(1)
+      chunk = sys.stdin.buffer.read(1)
       if not chunk:
         break
       f.write(chunk)
-      filesize += 1
+      fileSize += 1
     f.close()
     
-#  unpad = lambda s : s[0:-ord(s[-1])] # This defines an unpad function that can be called with unpad(decryptedString)
+#  unpad = lambda s : s[0:-ord(s[len-1:])] # This defines an unpad function that can be called with unpad(decryptedString)
   
   if(CIPHER=="aes128"): # This block reads from stdin in 16 byte segments, encrypts and sends them as they are read
     key = hashlib.md5(PW.encode()).hexdigest() # Generates a 16-byte key from the given password
@@ -234,8 +235,8 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
 #    crypto_checker = 
          
     c_header = COMMAND + "\n" + FILENAME + "\n" + fileSize + ". ."  # The crypto header needs to be filled with the command, filename, and filesize 
-    pad(c_header)
-    cryto_header = encryptor.encrypt(bytes(c_header,"UTF-8"))
+    crypt_header = pad(c_header)
+    cryto_header = encryptor.encrypt(bytes(crypt_header,"UTF-8"))
     
     with open(tempFile,'rb') as inload:
       while(True):
@@ -243,9 +244,9 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
         if(len(chunk)==0):
           break
         elif(len(chunk) % 16 != 0):
-          chunk += ' ' * (16 - len(chunk) % 16)
-        encryptor.encrypt(chunk)
-        clientSocket.send(chunk)
+          chunk += bytes(' ' * (16 - len(chunk) % 16))
+        encrypted = encryptor.encrypt(chunk)
+        clientSocket.send(encrypted)
 
   elif(CIPHER=="aes256"): # This block reads from stdin in 16 byte segments, encrypts and sends them as they are read
     key = hashlib.sha256(PW.encode()).hexdigest() # Generates a 32-byte key from the given password
@@ -256,9 +257,9 @@ def sendFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
         if(len(chunk)==0):
           break
         elif(len(chunk) % 16 != 0):
-          chunk += ' ' * (16 - len(chunk) % 16)
-        encryptor.encrypt(chunk)
-        clientSocket.send(chunk)
+          chunk += bytes(' ' * (16 - len(chunk) % 16))
+        encrypted = encryptor.encrypt(chunk)
+        clientSocket.send(encrypted)
     
 #def recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
 
