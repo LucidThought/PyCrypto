@@ -6,6 +6,7 @@ import os
 import hashlib
 import base64
 import time
+import logging
 from threading import Thread
 from Crypto import Random
 from Crypto.Cipher import AES
@@ -14,6 +15,10 @@ LISTEN = True
 SERVER_HOST = ''
 SERVER_PORT = 0
 PW = ''
+logging.basicConfig(level=logging.INFO, format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s', filename='server_log.txt', filemode='a')
+logging.info("Crypto File Transfer Server Log")
+logger = logging.getLogger("serverLog")
+
 
 def start():
 
@@ -21,6 +26,7 @@ def start():
   global SERVER_PORT
   global SERVER_HOST
   global PW
+  global module_logger
   SERVER_PORT = int(sys.argv[1])
   SERVER_HOST = 'localhost' # server host
   if(len(sys.argv) == 3):
@@ -39,7 +45,9 @@ def start_file_server():
     client_ip = str(addr[0])
     client_port = str(addr[1])
     client_ip,client_port = str(addr[0]),str(addr[1])
-    print(client_ip + ':' + client_port + ' has connected')
+    logStr = client_ip + ':' + client_port + ' has connected'
+    print(logStr)
+    logging.info(logStr)
     Thread(target=client_connect, args=(clientSock,client_ip,client_port)).start()
 
 
@@ -69,11 +77,13 @@ def client_connect(clientSock,client_ip,client_port):
     elif cipher == "aes128":
       segment_size = 16
       aes128EncryptionMode(IV, segment_size, clientSock,client_ip)
+      logging.info(client_ip + " has entered AES-128 mode")
  
     #AES 256 (16 byte blocks)
     elif cipher == "aes256":
       segment_size = 16
       aes256EncryptionMode(IV, segment_size, clientSock,client_ip)
+      logging.info(client_ip + " has entered AES-256 mode")
 
 
 def noEncryptionMode(segment_size, clientSock, client_ip):
@@ -89,8 +99,10 @@ def noEncryptionMode(segment_size, clientSock, client_ip):
       
     if command == "write":
       print("Attempting to upload file: "+file_name+" to server from: " + client_ip)
+      logging.info(client_ip + " is uploading a file without encryption")
       getFileNoEncryption(file_name,segment_size,clientSock)
     elif command == "read":
+      logging.info(client_ip + " is requesting a file without encryption")
       sendFileNoEncryption(file_name,clientSock)
     else:
       print( "command: "+command+ " not a valid command" )
@@ -117,13 +129,10 @@ def getFileNoEncryption(file_name,segment_size,clientSock):
       bytes_written += len(data)
   f.close()
   print("file: "+file_name+" successfully uploaded to server") 
+  logging.info(file_name + " has been uploaded to the server")
   
  
 def sendFileNoEncryption(file_name,clientSock):
-
-  print("server is in getFile mode")
-  print(file_name)
-
   buffSize = 1024
   with open(file_name,'rb') as infile:
     
@@ -136,8 +145,7 @@ def sendFileNoEncryption(file_name,clientSock):
     while data:
       clientSock.send(data)
       data = infile.read(1024)
-    print("file sent")
-    #clientSock.close() 
+    logging.info(file_name + " has been sent from the server")
   infile.close()
 
 
@@ -155,10 +163,8 @@ def aes128EncryptionMode(IV, segment_size,clientSock,client_ip):
       decryptedByteString = decryptor.decrypt(chunk)
       decryptedString = decryptedByteString.decode("UTF-8") #decodes the bytestring segment into a string
       decryptHeader = decryptHeader + decryptedString
-      if (decryptHeader.find(". .") == -1):
-        print("No delimiter detected") #DEBUG
-      else:
-        print("Delimiter detected, removing padding from segment") #debug
+      if (decryptHeader.find(". .") != -1):
+        logging.info("Received encrypted header from " + client_ip + " in AES-128 mode")
         index = decryptHeader.find(". .") 
         decryptHeader = decryptHeader[:index]
         break
@@ -170,6 +176,7 @@ def aes128EncryptionMode(IV, segment_size,clientSock,client_ip):
   FILENAME = (header_array[1])
 
   if COMMAND == "write":
+    logging.info("Receiving file " + FILENAME + " from " + client_ip + " in AES-128 mode")
     fileSize = int(header_array[2])
     bytes_written = 0
     with open(FILENAME,"wb+") as f:
@@ -184,7 +191,7 @@ def aes128EncryptionMode(IV, segment_size,clientSock,client_ip):
         f.write(decryptedDataString)
     f.close() 
   elif COMMAND == "read":
-    sendFileAes128(key, IV, segment_size, FILENAME,clientSock)
+    sendFileAes128(key, IV, segment_size, FILENAME, clientSock, client_ip)
 
 def aes256EncryptionMode(IV, segment_size,clientSock,client_ip):
   global PW
@@ -201,9 +208,8 @@ def aes256EncryptionMode(IV, segment_size,clientSock,client_ip):
       decryptedString = decryptedByteString.decode("UTF-8") #decodes the bytestring segment into a string
       decryptHeader = decryptHeader + decryptedString
       if (decryptHeader.find(". .") == -1):
-        print("No delimiter detected") #DEBUG
-      else:
-        print("Delimiter detected, removing padding from segment") #debug
+        logging.info("Received encrypted header from " + client_ip + " in AES-256 mode")
+        logging.info("Header: " + decryptHeader)
         index = decryptHeader.find(". .") 
         decryptHeader = decryptHeader[:index]
         break
@@ -215,6 +221,7 @@ def aes256EncryptionMode(IV, segment_size,clientSock,client_ip):
   FILENAME = (header_array[1])
 
   if COMMAND == "write":
+    logging.info("Receiving file " + FILENAME + " from " + client_ip + " in AES-256 mode")
     fileSize = int(header_array[2])
     bytes_written = 0
     with open(FILENAME,"wb+") as f:
@@ -229,9 +236,9 @@ def aes256EncryptionMode(IV, segment_size,clientSock,client_ip):
         f.write(decryptedDataString)
     f.close() 
   elif COMMAND == "read":
-    sendFileAes256(key, IV, segment_size, FILENAME,clientSock) 
+    sendFileAes256(key, IV, segment_size, FILENAME,clientSock, client_ip) 
 
-def sendFileAes128(key, IV, segment_size, FILENAME,clientSock):
+def sendFileAes128(key, IV, segment_size, FILENAME, clientSock, ip):
   global PW
   pad = lambda s: s + (segment_size - len(s) % segment_size) * chr(segment_size - len(s) % segment_size) # This defines a pad function that can be called with pad(string)
   encryptor = AES.new(key,AES.MODE_CBC,IV)
@@ -241,6 +248,7 @@ def sendFileAes128(key, IV, segment_size, FILENAME,clientSock):
     file_size = os.path.getsize(FILENAME)
   except:
     print("Requested file does not exist")
+    logging.info("Requested file does not exist")
     verify = "False"
   c_header = verify + "\n"  + str(file_size) + ". ."  # The crypto header needs to be filled with the command, filename, and filesize 
   crypt_header = pad(c_header)
@@ -248,6 +256,7 @@ def sendFileAes128(key, IV, segment_size, FILENAME,clientSock):
   clientSock.send(crypto_header)
 
   with open(FILENAME,'rb') as rfile:
+    logging.info("Sending file " + FILENAME + " to " + ip + " in AES-128 mode")
     chunk = rfile.read(segment_size)
     while(chunk):
       if(len(chunk) % segment_size != 0):
@@ -258,8 +267,34 @@ def sendFileAes128(key, IV, segment_size, FILENAME,clientSock):
       chunk = rfile.read(segment_size)
   rfile.close()
 
-def sendFileAes256(key, IV, segment_size, FILENAME,clientSock):
-  print("sendFileAes256 not implemented")
+def sendFileAes256(key, IV, segment_size, FILENAME, clientSock, ip):
+  global PW
+  pad = lambda s: s + (segment_size - len(s) % segment_size) * chr(segment_size - len(s) % segment_size) # This defines a pad function that can be called with pad(string)
+  encryptor = AES.new(key,AES.MODE_CBC,IV)
+  decryptor = AES.new(key,AES.MODE_CBC,IV)
+  verify = "True"
+  try:
+    file_size = os.path.getsize(FILENAME)
+  except:
+    print("Requested file does not exist")
+    logging.info("Requested file does not exist")
+    verify = "False"
+  c_header = verify + "\n"  + str(file_size) + ". ."  # The crypto header needs to be filled with the command, filename, and filesize 
+  crypt_header = pad(c_header)
+  crypto_header = encryptor.encrypt(crypt_header.encode("UTF-8"))
+  clientSock.send(crypto_header)
+
+  with open(FILENAME,'rb') as rfile:
+    logging.info("Sending file " + FILENAME + " to " + ip + " in AES-256 mode")
+    chunk = rfile.read(segment_size)
+    while(chunk):
+      if(len(chunk) % segment_size != 0):
+        dchunk = b'\x00' * (segment_size - len(chunk) % segment_size)
+        chunk = b"".join([chunk,dchunk])
+      oChunk = encryptor.encrypt(chunk)
+      clientSock.send(oChunk)
+      chunk = rfile.read(segment_size)
+  rfile.close()
 
 if __name__ == "__main__":
   start()

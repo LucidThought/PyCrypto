@@ -334,20 +334,36 @@ def recvFileEncryption(COMMAND, FILENAME, CIPHER, PW, segment_s, clientSocket):
     crypto_header = encryptor.encrypt(crypt_header.encode("UTF-8"))
     clientSocket.send(crypto_header)
 
-    rcHeader = clientSocket.recv(segment_s)
-    ruHeader = int(decryptor.decrypt(rcHeader))
+    decryptHeader = ''
+    while True:
+      chunk = clientSocket.recv(segment_s)
+      if len(chunk) > 0:
+        decryptedByteString = decryptor.decrypt(chunk)
+        decryptedString = decryptedByteString.decode("UTF-8") #decodes the bytestring segment into a string
+        decryptHeader = decryptHeader + decryptedString
+        if (decryptHeader.find(". .") != -1):
+          index = decryptHeader.find(". .") 
+          decryptHeader = decryptHeader[:index]
+          break
+    header_array = decryptHeader.split("\n")
+    verify = header_array[0]
+    fileSize = int(header_array[1])
+
+    if(verify == "False"):
+      sys.exit("File does not exist")
 
     bytes_written = 0
-    while(True):
+    while(bytes_written < fileSize):
       data = clientSocket.recv(segment_s)
       if not data:
         break
       decryptedData = decryptor.decrypt(data)
-      bytes_written += segment_s
-      if(bytes_written > ruHeader):
-        decryptedData = decryptedData[:ruHeader % segment_s]
-        sys.stdout.buffer.write(decryptedData)
+      if len(data) + bytes_written > fileSize:
+        decryptedData = decryptedData[:fileSize % segment_s]
+      bytes_written += len(data)
       sys.stdout.buffer.write(decryptedData)
+  
+
 
 if __name__ == '__main__':
   main()
