@@ -7,6 +7,8 @@ import hashlib
 import base64
 import time
 import logging
+import random
+import string
 from threading import Thread
 from Crypto import Random
 from Crypto.Cipher import AES
@@ -31,7 +33,13 @@ def start():
   SERVER_HOST = 'localhost' # server host
   if(len(sys.argv) == 3):
     PW = str(sys.argv[2])
+  if(len(sys.argv) == 2):
+    PW = randomString(10)
+  print("Using secret key: " + PW)
   start_file_server()
+
+def randomString(length):
+  return ''.join([random.choice(string.ascii_lowercase + string.digits) for n in range(16)])
 
 def start_file_server():
   server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -53,7 +53,6 @@ def main():
       DEST = str(sys.argv[3])
       CIPHER = str(sys.argv[4])
       PW = str(sys.argv[5])
-#      print("Password: " + PW)
 
     elif(len(sys.argv)==4):
       COMMAND = str(sys.argv[1])
