@@ -207,9 +207,8 @@ def aes256EncryptionMode(IV, segment_size,clientSock,client_ip):
       decryptedByteString = decryptor.decrypt(chunk)
       decryptedString = decryptedByteString.decode("UTF-8") #decodes the bytestring segment into a string
       decryptHeader = decryptHeader + decryptedString
-      if (decryptHeader.find(". .") == -1):
+      if (decryptHeader.find(". .") != -1):
         logging.info("Received encrypted header from " + client_ip + " in AES-256 mode")
-        logging.info("Header: " + decryptHeader)
         index = decryptHeader.find(". .") 
         decryptHeader = decryptHeader[:index]
         break
