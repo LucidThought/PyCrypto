@@ -117,7 +117,7 @@ def startClientNone():
     padded_message = bytes(first_message,'UTF-8') + struct.pack(padding_arg1,*([0]*padding))
     clientSocket.send(padded_message)
     clientSocket.send(IV)
-    print("Hi server --> sending cipher + IV(nonce) + padding: "+ str(len(padded_message))+" bytes")
+    #print("Hi server --> sending cipher + IV(nonce) + padding: "+ str(len(padded_message))+" bytes")
     getFileNoEncryption(clientSocket)
  
   elif(COMMAND=='write'):
@@ -159,20 +159,22 @@ def getFileNoEncryption(clientSocket):
   temp_data = clientSocket.recv(segment_size)
   array = temp_data.split(b". .") 
   file_size = int(array[0])
+  #print("Debug-> got header payload size:"+str(file_size))
 
   #Now recieve payload from the server, and push to sys.stdout
   #1024 bytes at a time
+  #print(file_size) 
   bytes_written = 0
   while(bytes_written < file_size):
     data = clientSocket.recv(segment_size)
     if not data:
       break
     if len(data) + bytes_written > file_size:
-      data = data[:file_size-bytes_written]
+      data = data[:file_size % segment_size]
     bytes_written += len(data)
     sys.stdout.buffer.write(data)
 
-  print("OK")
+  #print("OK")
       
 def sendFileNoEncryption(payload_file,segment_size,clientSocket):
   global COMMAND
@@ -183,19 +185,29 @@ def sendFileNoEncryption(payload_file,segment_size,clientSocket):
   sendHeaderNoEncrypt(COMMAND,FILENAME,clientSocket)
     
   with open(payload_file,'rb') as f:
-    
+
     # Get payload size, and send to server so it knows how much data to recieve
-    payload_size = len(f.read())
+    payload_size = str(len(f.read()))
     print("Client sending file of size: " + str(payload_size) + " bytes")  ## TEST
-    clientSocket.send( bytes(str(payload_size)+'. .','UTF-8'))
+    filesize_message = payload_size + ". ."
+    message_size = len(filesize_message)
+    padding = 1024 - message_size
+    padding_arg1 = str(padding)+"B"
+    padded_filesize_message = bytes(filesize_message,'UTF-8') + struct.pack(padding_arg1,*([0]*padding))
+    clientSocket.send( padded_filesize_message)
 
     #reset read pointer on payload file, and send file 1024 bytes at a time
     f.seek(0) 
-    data = f.read(segment_size)
-    while data:
-      clientSocket.send(data)
-      data = f.read(segment_size)
-    f.close()
+    while(True):
+      chunk = f.read(segment_size)
+      if(len(chunk)==0):
+        break
+      elif(len(chunk) % segment_size != 0):
+        dchunk = b'\x00' * (segment_size - len(chunk) % segment_size)
+        chunk = b"".join([chunk,dchunk])
+      if(len(chunk) % segment_size == 0):
+        clientSocket.send(chunk)
+  f.close()
 
 def sendHeaderNoEncrypt(COMMAND,FILENAME,clientSocket):
   header = bytes(COMMAND+"\n"+FILENAME+"\n","UTF-8")
