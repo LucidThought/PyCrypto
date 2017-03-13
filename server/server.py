@@ -9,6 +9,7 @@ import time
 import logging
 import random
 import string
+import struct
 from threading import Thread
 from Crypto import Random
 from Crypto.Cipher import AES
@@ -116,46 +117,57 @@ def noEncryptionMode(segment_size, clientSock, client_ip):
       print( "command: "+command+ " not a valid command" )
 
 def getFileNoEncryption(file_name,segment_size,clientSock):
-  
-  buffSize = segment_size
 
+  buffSize = segment_size
   file_header = clientSock.recv(segment_size)
   header_array = file_header.split(b". .")
-
   file_size = int(header_array[0])
   bytes_written = 0
+  print(file_size)
   
   #CREATE THE FILE ON THE SERVER, WILL OVERWRITE IF EXISTS
   with open(file_name,"wb+") as f:
-    while(bytes_written < file_size):
+    while(True):
       data = clientSock.recv(buffSize)
       if not data:
         break
-      if len(data) + bytes_written > file_size:
-        data = data[:file_size-bytes_written]
-      f.write(data)
       bytes_written += len(data)
+      if(bytes_written > file_size):
+        data = data[:file_size % segment_size]
+      f.write(data)
   f.close()
   print("file: "+file_name+" successfully uploaded to server") 
   logging.info(file_name + " has been uploaded to the server")
   
  
 def sendFileNoEncryption(file_name,clientSock):
-  buffSize = 1024
-  with open(file_name,'rb') as infile:
-    
-    file_size = len(infile.read())
-    clientSock.send( bytes(str(file_size)+'. .','UTF-8')) 
-    infile.seek(0)
-    print(str(file_size))
-    #send header (only sending size right now, will need more in header later for encryption)
-    data = infile.read(1024)
-    while data:
-      clientSock.send(data)
-      data = infile.read(1024)
-    logging.info(file_name + " has been sent from the server")
-  infile.close()
 
+  buffSize = 1024
+  try:
+    payload_size = os.path.getsize(file_name)
+  except:
+    print("Requested file does not exist")
+    logging.info("Requested file does not exist")
+
+  print("debug-->Server sending file of size:"+str(payload_size))
+  filesize_message = str(payload_size) + ". ."
+  message_size = len(filesize_message)
+  padding = 1024 - message_size
+  padding_arg1 = str(padding)+"B"
+  padded_filesize_message = bytes(filesize_message,'UTF-8') + struct.pack(padding_arg1,*([0]*padding))
+  clientSock.send( padded_filesize_message)
+
+  print(buffSize)
+  with open(file_name,'rb') as infile:
+    chunk = infile.read(1024)
+    while(chunk):
+      if(len(chunk) % buffSize !=0):
+        dchunk = b'\x00' * (buffSize - len(chunk) % buffSize)
+        chunk = b"".join([chunk,dchunk])
+      clientSock.send(chunk)
+      chunk = infile.read(buffSize)
+  logging.info(file_name + " has been sent from the server")
+  infile.close()
 
 def aes128EncryptionMode(IV, segment_size,clientSock,client_ip):
   global PW

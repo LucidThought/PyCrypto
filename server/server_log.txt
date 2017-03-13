@@ -1,0 +1,492 @@
+2017-03-12 16:48:17,058,58 root INFO Crypto File Transfer Server Log
+2017-03-12 16:48:25,388,388 root INFO 127.0.0.1:39004 has connected
+2017-03-12 16:48:25,389,389 root INFO Received encrypted header from 127.0.0.1 in AES-128 mode
+2017-03-12 16:48:25,390,390 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-128 mode
+2017-03-12 16:48:25,465,465 root INFO 127.0.0.1 has entered AES-128 mode
+2017-03-12 16:48:29,216,216 root INFO 127.0.0.1:39006 has connected
+2017-03-12 16:48:29,219,219 root INFO Received encrypted header from 127.0.0.1 in AES-128 mode
+2017-03-12 16:48:29,220,220 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-128 mode
+2017-03-12 16:48:29,474,474 root INFO 127.0.0.1 has entered AES-128 mode
+2017-03-12 16:48:31,218,218 root INFO 127.0.0.1:39008 has connected
+2017-03-12 16:48:31,219,219 root INFO Received encrypted header from 127.0.0.1 in AES-128 mode
+2017-03-12 16:48:31,220,220 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-128 mode
+2017-03-12 16:48:31,927,927 root INFO 127.0.0.1 has entered AES-128 mode
+2017-03-12 16:48:33,225,225 root INFO 127.0.0.1:39010 has connected
+2017-03-12 16:48:33,247,247 root INFO Received encrypted header from 127.0.0.1 in AES-128 mode
+2017-03-12 16:48:33,249,249 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-128 mode
+2017-03-12 16:48:36,032,32 root INFO 127.0.0.1 has entered AES-128 mode
+2017-03-12 16:48:39,812,812 root INFO 127.0.0.1:39012 has connected
+2017-03-12 16:48:39,851,851 root INFO Received encrypted header from 127.0.0.1 in AES-128 mode
+2017-03-12 16:48:39,856,856 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-128 mode
+2017-03-12 16:48:41,520,520 root INFO 127.0.0.1 has entered AES-128 mode
+2017-03-12 16:48:46,416,416 root INFO 127.0.0.1:39014 has connected
+2017-03-12 16:48:46,445,445 root INFO Received encrypted header from 127.0.0.1 in AES-128 mode
+2017-03-12 16:48:46,447,447 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-128 mode
+2017-03-12 16:48:47,742,742 root INFO 127.0.0.1 has entered AES-128 mode
+2017-03-12 16:48:49,737,737 root INFO 127.0.0.1:39016 has connected
+2017-03-12 16:48:49,796,796 root INFO Received encrypted header from 127.0.0.1 in AES-128 mode
+2017-03-12 16:48:49,802,802 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-128 mode
+2017-03-12 16:48:50,665,665 root INFO 127.0.0.1 has entered AES-128 mode
+2017-03-12 16:49:02,363,363 root INFO 127.0.0.1:39018 has connected
+2017-03-12 16:49:02,418,418 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 16:49:02,434,434 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-256 mode
+2017-03-12 16:49:03,339,339 root INFO 127.0.0.1 has entered AES-256 mode
+2017-03-12 16:49:05,925,925 root INFO 127.0.0.1:39020 has connected
+2017-03-12 16:49:05,966,966 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 16:49:05,978,978 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-256 mode
+2017-03-12 16:49:07,254,254 root INFO 127.0.0.1 has entered AES-256 mode
+2017-03-12 16:49:08,415,415 root INFO 127.0.0.1:39022 has connected
+2017-03-12 16:49:08,420,420 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 16:49:08,436,436 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-256 mode
+2017-03-12 16:49:10,336,336 root INFO 127.0.0.1 has entered AES-256 mode
+2017-03-12 16:49:28,041,41 root INFO 127.0.0.1:39024 has connected
+2017-03-12 16:49:28,110,110 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 16:49:28,116,116 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-256 mode
+2017-03-12 16:49:29,943,943 root INFO 127.0.0.1 has entered AES-256 mode
+2017-03-12 17:42:28,968,968 root INFO Crypto File Transfer Server Log
+2017-03-12 17:42:31,504,504 root INFO 127.0.0.1:39036 has connected
+2017-03-12 17:42:31,722,722 root INFO Received encrypted header from 127.0.0.1 in AES-128 mode
+2017-03-12 17:42:31,723,723 root INFO Receiving file gotpic.jpg from 127.0.0.1 in AES-128 mode
+2017-03-12 17:42:31,843,843 root INFO 127.0.0.1 has entered AES-128 mode
+2017-03-12 17:42:41,925,925 root INFO 127.0.0.1:39038 has connected
+2017-03-12 17:42:42,118,118 root INFO Received encrypted header from 127.0.0.1 in AES-128 mode
+2017-03-12 17:42:42,119,119 root INFO Receiving file gotpic.jpg from 127.0.0.1 in AES-128 mode
+2017-03-12 17:42:42,401,401 root INFO 127.0.0.1 has entered AES-128 mode
+2017-03-12 17:44:25,916,916 root INFO 127.0.0.1:39040 has connected
+2017-03-12 17:44:25,918,918 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 17:44:25,919,919 root INFO Requested file does not exist
+2017-03-12 17:45:20,040,40 root INFO 127.0.0.1:39042 has connected
+2017-03-12 17:45:20,045,45 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 17:45:20,046,46 root INFO Requested file does not exist
+2017-03-12 17:45:45,309,309 root INFO 127.0.0.1:39044 has connected
+2017-03-12 17:45:45,310,310 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 17:45:45,312,312 root INFO Requested file does not exist
+2017-03-12 17:45:53,933,933 root INFO Crypto File Transfer Server Log
+2017-03-12 17:45:56,317,317 root INFO 127.0.0.1:39046 has connected
+2017-03-12 17:45:56,318,318 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 17:45:56,319,319 root INFO Requested file does not exist
+2017-03-12 17:50:23,864,864 root INFO Crypto File Transfer Server Log
+2017-03-12 17:51:41,606,606 root INFO 127.0.0.1:39052 has connected
+2017-03-12 17:51:41,607,607 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 17:51:41,607,607 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-256 mode
+2017-03-12 17:51:41,690,690 root INFO 127.0.0.1 has entered AES-256 mode
+2017-03-12 17:52:19,201,201 root INFO 127.0.0.1:39054 has connected
+2017-03-12 17:52:19,223,223 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 17:52:19,224,224 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-256 mode
+2017-03-12 17:52:20,298,298 root INFO 127.0.0.1 has entered AES-256 mode
+2017-03-12 17:52:59,450,450 root INFO 127.0.0.1:39056 has connected
+2017-03-12 17:53:00,354,354 root INFO Received encrypted header from 127.0.0.1 in AES-128 mode
+2017-03-12 17:53:00,355,355 root INFO Receiving file gotpic.jpg from 127.0.0.1 in AES-128 mode
+2017-03-12 17:53:00,912,912 root INFO 127.0.0.1 has entered AES-128 mode
+2017-03-12 17:53:45,603,603 root INFO 127.0.0.1:39058 has connected
+2017-03-12 17:53:45,925,925 root INFO Received encrypted header from 127.0.0.1 in AES-128 mode
+2017-03-12 17:53:45,926,926 root INFO Receiving file gotpic.jpg from 127.0.0.1 in AES-128 mode
+2017-03-12 17:53:46,806,806 root INFO 127.0.0.1 has entered AES-128 mode
+2017-03-12 17:54:35,278,278 root INFO 127.0.0.1:39060 has connected
+2017-03-12 17:54:35,778,778 root INFO Received encrypted header from 127.0.0.1 in AES-128 mode
+2017-03-12 17:54:35,779,779 root INFO Receiving file gotpic.jpg from 127.0.0.1 in AES-128 mode
+2017-03-12 17:54:36,579,579 root INFO 127.0.0.1 has entered AES-128 mode
+2017-03-12 17:54:55,796,796 root INFO 127.0.0.1:39062 has connected
+2017-03-12 17:54:56,209,209 root INFO Received encrypted header from 127.0.0.1 in AES-128 mode
+2017-03-12 17:54:56,210,210 root INFO Receiving file gotpic.jpg from 127.0.0.1 in AES-128 mode
+2017-03-12 17:54:57,162,162 root INFO 127.0.0.1 has entered AES-128 mode
+2017-03-12 17:55:08,684,684 root INFO 127.0.0.1:39064 has connected
+2017-03-12 17:55:09,132,132 root INFO Received encrypted header from 127.0.0.1 in AES-128 mode
+2017-03-12 17:55:09,133,133 root INFO Receiving file gotpic.jpg from 127.0.0.1 in AES-128 mode
+2017-03-12 17:55:10,200,200 root INFO 127.0.0.1 has entered AES-128 mode
+2017-03-12 17:55:23,428,428 root INFO 127.0.0.1:39066 has connected
+2017-03-12 17:55:23,457,457 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 17:55:23,467,467 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-256 mode
+2017-03-12 17:55:24,302,302 root INFO 127.0.0.1 has entered AES-256 mode
+2017-03-12 17:55:39,295,295 root INFO 127.0.0.1:39068 has connected
+2017-03-12 17:55:39,318,318 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 17:55:39,328,328 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-256 mode
+2017-03-12 17:55:41,070,70 root INFO 127.0.0.1 has entered AES-256 mode
+2017-03-12 17:56:00,263,263 root INFO 127.0.0.1:39070 has connected
+2017-03-12 17:56:00,298,298 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 17:56:00,306,306 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-256 mode
+2017-03-12 17:56:01,334,334 root INFO 127.0.0.1 has entered AES-256 mode
+2017-03-12 18:08:58,523,523 root INFO 127.0.0.1:39566 has connected
+2017-03-12 18:11:52,421,421 root INFO Received encrypted header from 127.0.0.1 in AES-128 mode
+2017-03-12 18:11:52,427,427 root INFO Receiving file gotzip.jpg from 127.0.0.1 in AES-128 mode
+2017-03-12 18:16:57,164,164 root INFO 127.0.0.1:39568 has connected
+2017-03-12 18:16:57,521,521 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 18:16:57,522,522 root INFO Receiving file gotpic.jpg from 127.0.0.1 in AES-256 mode
+2017-03-12 18:16:59,369,369 root INFO 127.0.0.1 has entered AES-256 mode
+2017-03-12 18:17:28,259,259 root INFO 127.0.0.1:39570 has connected
+2017-03-12 18:17:28,631,631 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 18:17:28,632,632 root INFO Receiving file gotpic.jpg from 127.0.0.1 in AES-256 mode
+2017-03-12 18:17:31,172,172 root INFO 127.0.0.1 has entered AES-256 mode
+2017-03-12 18:17:46,964,964 root INFO 127.0.0.1:39572 has connected
+2017-03-12 18:17:47,439,439 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 18:17:47,449,449 root INFO Receiving file gotpic.jpg from 127.0.0.1 in AES-256 mode
+2017-03-12 18:17:49,934,934 root INFO 127.0.0.1 has entered AES-256 mode
+2017-03-12 18:18:08,890,890 root INFO 127.0.0.1:39574 has connected
+2017-03-12 18:18:08,939,939 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 18:18:08,940,940 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-256 mode
+2017-03-12 18:18:11,271,271 root INFO 127.0.0.1 has entered AES-256 mode
+2017-03-12 18:18:35,527,527 root INFO 127.0.0.1:39576 has connected
+2017-03-12 18:18:35,567,567 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 18:18:35,583,583 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-256 mode
+2017-03-12 18:18:38,509,509 root INFO 127.0.0.1 has entered AES-256 mode
+2017-03-12 18:18:49,218,218 root INFO 127.0.0.1:39578 has connected
+2017-03-12 18:18:49,223,223 root INFO Received encrypted header from 127.0.0.1 in AES-256 mode
+2017-03-12 18:18:49,293,293 root INFO Sending file gotpic.jpg to 127.0.0.1 in AES-256 mode
+2017-03-12 18:18:51,649,649 root INFO 127.0.0.1 has entered AES-256 mode
+2017-03-12 18:19:31,890,890 root INFO Crypto File Transfer Server Log
+2017-03-12 18:19:47,327,327 root INFO 127.0.0.1:39580 has connected
+2017-03-12 18:19:47,328,328 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 18:19:47,331,331 root INFO gotpic.jpg has been sent from the server
+2017-03-12 18:20:07,680,680 root INFO 127.0.0.1:39582 has connected
+2017-03-12 18:20:07,686,686 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 18:20:07,724,724 root INFO gotpic.jpg has been sent from the server
+2017-03-12 18:20:17,183,183 root INFO 127.0.0.1:39584 has connected
+2017-03-12 18:20:17,207,207 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 18:20:17,252,252 root INFO gotpic.jpg has been sent from the server
+2017-03-12 18:20:50,591,591 root INFO 127.0.0.1:39586 has connected
+2017-03-12 18:20:58,497,497 root INFO 127.0.0.1:39588 has connected
+2017-03-12 18:21:47,559,559 root INFO 127.0.0.1:39590 has connected
+2017-03-12 18:21:47,864,864 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 18:21:47,874,874 root INFO gotzip.jpg has been uploaded to the server
+2017-03-12 18:22:27,342,342 root INFO 127.0.0.1:39592 has connected
+2017-03-12 18:22:27,683,683 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 18:22:27,732,732 root INFO gotzip.jpg has been uploaded to the server
+2017-03-12 18:22:39,645,645 root INFO 127.0.0.1:39594 has connected
+2017-03-12 18:22:39,938,938 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 18:40:04,115,115 root INFO Crypto File Transfer Server Log
+2017-03-12 18:40:22,397,397 root INFO 127.0.0.1:39602 has connected
+2017-03-12 18:40:22,710,710 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 18:40:22,746,746 root INFO test.jpg has been uploaded to the server
+2017-03-12 18:41:49,292,292 root INFO 127.0.0.1:39604 has connected
+2017-03-12 18:41:49,687,687 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 18:41:49,693,693 root INFO test.jpg has been uploaded to the server
+2017-03-12 18:41:55,489,489 root INFO Crypto File Transfer Server Log
+2017-03-12 18:41:58,086,86 root INFO 127.0.0.1:39606 has connected
+2017-03-12 18:41:58,395,395 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 18:42:14,361,361 root INFO Crypto File Transfer Server Log
+2017-03-12 18:42:17,053,53 root INFO 127.0.0.1:39608 has connected
+2017-03-12 18:42:17,397,397 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 18:42:17,432,432 root INFO test.jpg has been uploaded to the server
+2017-03-12 18:44:20,871,871 root INFO Crypto File Transfer Server Log
+2017-03-12 18:44:23,832,832 root INFO 127.0.0.1:39610 has connected
+2017-03-12 18:44:24,050,50 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 18:44:49,284,284 root INFO Crypto File Transfer Server Log
+2017-03-12 18:44:51,595,595 root INFO 127.0.0.1:39612 has connected
+2017-03-12 18:44:51,779,779 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 18:44:51,993,993 root INFO test.jpg has been uploaded to the server
+2017-03-12 18:46:41,966,966 root INFO Crypto File Transfer Server Log
+2017-03-12 18:46:44,529,529 root INFO 127.0.0.1:39614 has connected
+2017-03-12 18:46:44,746,746 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 18:46:44,761,761 root INFO test.jpg has been uploaded to the server
+2017-03-12 18:53:53,415,415 root INFO Crypto File Transfer Server Log
+2017-03-12 18:53:56,278,278 root INFO 127.0.0.1:39620 has connected
+2017-03-12 18:53:56,499,499 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 18:53:56,517,517 root INFO test.jpg has been uploaded to the server
+2017-03-12 18:54:32,146,146 root INFO Crypto File Transfer Server Log
+2017-03-12 18:54:34,594,594 root INFO 127.0.0.1:39622 has connected
+2017-03-12 18:54:34,783,783 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 18:54:34,815,815 root INFO test.jpg has been uploaded to the server
+2017-03-12 18:55:10,913,913 root INFO Crypto File Transfer Server Log
+2017-03-12 18:55:13,401,401 root INFO 127.0.0.1:39624 has connected
+2017-03-12 18:55:13,665,665 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 18:55:13,672,672 root INFO test.jpg has been uploaded to the server
+2017-03-12 18:56:00,710,710 root INFO Crypto File Transfer Server Log
+2017-03-12 18:56:02,827,827 root INFO 127.0.0.1:39626 has connected
+2017-03-12 18:56:03,005,5 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 18:56:03,008,8 root INFO test.jpg has been uploaded to the server
+2017-03-12 18:56:16,947,947 root INFO Crypto File Transfer Server Log
+2017-03-12 18:56:22,208,208 root INFO 127.0.0.1:39628 has connected
+2017-03-12 18:56:22,376,376 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 18:56:22,380,380 root INFO test.jpg has been uploaded to the server
+2017-03-12 20:24:27,559,559 root INFO Crypto File Transfer Server Log
+2017-03-12 20:24:50,399,399 root INFO 127.0.0.1:39644 has connected
+2017-03-12 20:24:50,557,557 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:24:53,650,650 root INFO Crypto File Transfer Server Log
+2017-03-12 20:24:56,050,50 root INFO 127.0.0.1:39646 has connected
+2017-03-12 20:24:56,204,204 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:26:49,046,46 root INFO 127.0.0.1:39648 has connected
+2017-03-12 20:26:49,208,208 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:27:27,569,569 root INFO 127.0.0.1:39650 has connected
+2017-03-12 20:27:27,765,765 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:27:33,281,281 root INFO Crypto File Transfer Server Log
+2017-03-12 20:27:36,596,596 root INFO 127.0.0.1:39652 has connected
+2017-03-12 20:27:36,762,762 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:28:31,360,360 root INFO 127.0.0.1:39654 has connected
+2017-03-12 20:28:31,525,525 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:28:39,354,354 root INFO Crypto File Transfer Server Log
+2017-03-12 20:28:41,937,937 root INFO 127.0.0.1:39656 has connected
+2017-03-12 20:28:42,102,102 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:29:02,303,303 root INFO 127.0.0.1:39658 has connected
+2017-03-12 20:29:02,477,477 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:29:54,417,417 root INFO 127.0.0.1:39660 has connected
+2017-03-12 20:29:54,574,574 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:31:22,474,474 root INFO 127.0.0.1:39662 has connected
+2017-03-12 20:31:22,667,667 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:34:03,877,877 root INFO 127.0.0.1:39664 has connected
+2017-03-12 20:34:04,035,35 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:35:11,347,347 root INFO 127.0.0.1:39666 has connected
+2017-03-12 20:35:11,527,527 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:35:26,910,910 root INFO 127.0.0.1:39668 has connected
+2017-03-12 20:35:27,070,70 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:35:27,079,79 root INFO test.jpg has been uploaded to the server
+2017-03-12 20:37:52,341,341 root INFO 127.0.0.1:39670 has connected
+2017-03-12 20:37:52,589,589 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:37:52,596,596 root INFO test.jpg has been uploaded to the server
+2017-03-12 20:38:30,899,899 root INFO 127.0.0.1:39672 has connected
+2017-03-12 20:38:31,260,260 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:38:31,327,327 root INFO test.jpg has been uploaded to the server
+2017-03-12 20:41:24,808,808 root INFO Crypto File Transfer Server Log
+2017-03-12 20:41:27,153,153 root INFO 127.0.0.1:39674 has connected
+2017-03-12 20:41:27,306,306 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:41:27,317,317 root INFO test.jpg has been uploaded to the server
+2017-03-12 20:43:13,255,255 root INFO Crypto File Transfer Server Log
+2017-03-12 20:43:17,437,437 root INFO 127.0.0.1:39676 has connected
+2017-03-12 20:43:17,636,636 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:43:17,639,639 root INFO test.jpg has been uploaded to the server
+2017-03-12 20:56:25,156,156 root INFO Crypto File Transfer Server Log
+2017-03-12 20:56:28,363,363 root INFO 127.0.0.1:39682 has connected
+2017-03-12 20:56:28,558,558 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 20:56:28,561,561 root INFO test.jpg has been uploaded to the server
+2017-03-12 20:56:32,814,814 root INFO Crypto File Transfer Server Log
+2017-03-12 20:56:39,643,643 root INFO 127.0.0.1:39684 has connected
+2017-03-12 20:56:39,644,644 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 20:57:26,199,199 root INFO Crypto File Transfer Server Log
+2017-03-12 20:57:31,945,945 root INFO 127.0.0.1:39686 has connected
+2017-03-12 20:57:31,946,946 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 20:57:54,439,439 root INFO Crypto File Transfer Server Log
+2017-03-12 20:57:56,693,693 root INFO 127.0.0.1:39688 has connected
+2017-03-12 20:57:56,695,695 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 20:58:17,147,147 root INFO Crypto File Transfer Server Log
+2017-03-12 20:58:19,592,592 root INFO 127.0.0.1:39690 has connected
+2017-03-12 20:58:19,593,593 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 20:58:50,271,271 root INFO Crypto File Transfer Server Log
+2017-03-12 20:58:52,710,710 root INFO 127.0.0.1:39692 has connected
+2017-03-12 20:58:52,711,711 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 20:59:34,002,2 root INFO Crypto File Transfer Server Log
+2017-03-12 20:59:36,892,892 root INFO 127.0.0.1:39694 has connected
+2017-03-12 20:59:36,893,893 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 21:00:00,762,762 root INFO Crypto File Transfer Server Log
+2017-03-12 21:00:03,462,462 root INFO 127.0.0.1:39696 has connected
+2017-03-12 21:00:03,463,463 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 21:00:03,465,465 root INFO gotpic.jpg has been sent from the server
+2017-03-12 21:01:05,666,666 root INFO Crypto File Transfer Server Log
+2017-03-12 21:01:07,817,817 root INFO 127.0.0.1:39698 has connected
+2017-03-12 21:01:07,819,819 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 21:01:07,821,821 root INFO gotpic.jpg has been sent from the server
+2017-03-12 21:01:20,849,849 root INFO 127.0.0.1:39700 has connected
+2017-03-12 21:01:20,850,850 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 21:01:20,856,856 root INFO gotpic.jpg has been sent from the server
+2017-03-12 21:01:56,072,72 root INFO 127.0.0.1:39702 has connected
+2017-03-12 21:01:56,075,75 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 21:01:56,122,122 root INFO gotpic.jpg has been sent from the server
+2017-03-12 21:03:56,365,365 root INFO 127.0.0.1:39704 has connected
+2017-03-12 21:03:56,367,367 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 21:03:56,403,403 root INFO gotpic.jpg has been sent from the server
+2017-03-12 21:04:06,468,468 root INFO Crypto File Transfer Server Log
+2017-03-12 21:04:08,797,797 root INFO 127.0.0.1:39706 has connected
+2017-03-12 21:04:08,798,798 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 21:04:08,810,810 root INFO gotpic.jpg has been sent from the server
+2017-03-12 21:11:52,804,804 root INFO Crypto File Transfer Server Log
+2017-03-12 21:12:07,184,184 root INFO 127.0.0.1:39738 has connected
+2017-03-12 21:12:07,337,337 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 21:12:07,341,341 root INFO test.jpg has been uploaded to the server
+2017-03-12 21:14:48,429,429 root INFO Crypto File Transfer Server Log
+2017-03-12 21:15:13,342,342 root INFO 127.0.0.1:39740 has connected
+2017-03-12 21:15:13,344,344 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 21:15:13,362,362 root INFO test.jpg has been sent from the server
+2017-03-12 21:16:31,290,290 root INFO Crypto File Transfer Server Log
+2017-03-12 21:16:49,002,2 root INFO 127.0.0.1:39742 has connected
+2017-03-12 21:16:49,004,4 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 21:16:49,007,7 root INFO test.jpg has been sent from the server
+2017-03-12 22:03:53,818,818 root INFO Crypto File Transfer Server Log
+2017-03-12 22:04:16,286,286 root INFO 127.0.0.1:39748 has connected
+2017-03-12 22:04:16,446,446 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 22:04:16,457,457 root INFO test.jpg has been uploaded to the server
+2017-03-12 22:04:27,952,952 root INFO 127.0.0.1:39750 has connected
+2017-03-12 22:04:28,235,235 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 22:04:28,293,293 root INFO test.jpg has been uploaded to the server
+2017-03-12 22:15:13,130,130 root INFO Crypto File Transfer Server Log
+2017-03-12 22:15:39,026,26 root INFO 127.0.0.1:39752 has connected
+2017-03-12 22:15:39,178,178 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 22:15:39,183,183 root INFO test.jpg has been uploaded to the server
+2017-03-12 22:16:19,389,389 root INFO 127.0.0.1:39754 has connected
+2017-03-12 22:16:19,719,719 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 22:17:22,687,687 root INFO Crypto File Transfer Server Log
+2017-03-12 22:17:26,684,684 root INFO 127.0.0.1:39756 has connected
+2017-03-12 22:17:26,840,840 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 22:19:31,247,247 root INFO Crypto File Transfer Server Log
+2017-03-12 22:19:36,106,106 root INFO 127.0.0.1:39758 has connected
+2017-03-12 22:19:36,280,280 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 22:19:36,287,287 root INFO test.jpg has been uploaded to the server
+2017-03-12 22:20:13,200,200 root INFO Crypto File Transfer Server Log
+2017-03-12 22:20:15,555,555 root INFO 127.0.0.1:39760 has connected
+2017-03-12 22:20:15,709,709 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 22:20:15,712,712 root INFO test.jpg has been uploaded to the server
+2017-03-12 22:20:33,144,144 root INFO Crypto File Transfer Server Log
+2017-03-12 22:20:35,735,735 root INFO 127.0.0.1:39762 has connected
+2017-03-12 22:20:35,914,914 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 22:20:35,918,918 root INFO test.jpg has been uploaded to the server
+2017-03-12 22:28:41,761,761 root INFO Crypto File Transfer Server Log
+2017-03-12 22:28:44,173,173 root INFO 127.0.0.1:39764 has connected
+2017-03-12 22:28:44,328,328 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 22:28:44,331,331 root INFO test.jpg has been uploaded to the server
+2017-03-12 22:28:59,483,483 root INFO Crypto File Transfer Server Log
+2017-03-12 22:29:01,479,479 root INFO 127.0.0.1:39766 has connected
+2017-03-12 22:29:01,666,666 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 22:29:01,668,668 root INFO test.jpg has been uploaded to the server
+2017-03-12 22:37:50,502,502 root INFO Crypto File Transfer Server Log
+2017-03-12 22:37:54,336,336 root INFO Crypto File Transfer Server Log
+2017-03-12 22:37:58,655,655 root INFO 127.0.0.1:39768 has connected
+2017-03-12 22:37:58,844,844 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 22:37:58,856,856 root INFO test.jpg has been uploaded to the server
+2017-03-12 22:52:20,886,886 root INFO Crypto File Transfer Server Log
+2017-03-12 22:52:25,202,202 root INFO 127.0.0.1:39774 has connected
+2017-03-12 22:52:25,358,358 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 22:52:25,371,371 root INFO test.jpg has been uploaded to the server
+2017-03-12 22:52:38,002,2 root INFO 127.0.0.1:39776 has connected
+2017-03-12 22:52:38,003,3 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 22:53:14,964,964 root INFO Crypto File Transfer Server Log
+2017-03-12 22:53:17,922,922 root INFO 127.0.0.1:39778 has connected
+2017-03-12 22:53:17,924,924 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 22:53:17,948,948 root INFO test.jpg has been sent from the server
+2017-03-12 22:55:35,576,576 root INFO Crypto File Transfer Server Log
+2017-03-12 22:55:41,653,653 root INFO 127.0.0.1:39780 has connected
+2017-03-12 22:55:41,654,654 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 22:55:41,657,657 root INFO test.jpg has been sent from the server
+2017-03-12 22:58:49,377,377 root INFO 127.0.0.1:39782 has connected
+2017-03-12 22:58:49,379,379 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 22:58:49,434,434 root INFO test.jpg has been sent from the server
+2017-03-12 22:59:03,258,258 root INFO 127.0.0.1:39784 has connected
+2017-03-12 22:59:03,278,278 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 22:59:03,281,281 root INFO test.jpg has been sent from the server
+2017-03-12 23:09:19,141,141 root INFO Crypto File Transfer Server Log
+2017-03-12 23:09:22,186,186 root INFO 127.0.0.1:39786 has connected
+2017-03-12 23:09:22,186,186 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:09:22,189,189 root INFO test.jpg has been sent from the server
+2017-03-12 23:10:32,629,629 root INFO Crypto File Transfer Server Log
+2017-03-12 23:10:38,842,842 root INFO Crypto File Transfer Server Log
+2017-03-12 23:11:13,195,195 root INFO 127.0.0.1:39788 has connected
+2017-03-12 23:11:13,196,196 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:11:13,199,199 root INFO gotpic.jpg has been sent from the server
+2017-03-12 23:11:24,348,348 root INFO 127.0.0.1:39790 has connected
+2017-03-12 23:11:24,355,355 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:11:24,386,386 root INFO gotpic.jpg has been sent from the server
+2017-03-12 23:12:32,621,621 root INFO Crypto File Transfer Server Log
+2017-03-12 23:12:53,878,878 root INFO 127.0.0.1:39792 has connected
+2017-03-12 23:12:54,030,30 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 23:12:54,034,34 root INFO test.jpg has been uploaded to the server
+2017-03-12 23:13:06,589,589 root INFO Crypto File Transfer Server Log
+2017-03-12 23:13:16,708,708 root INFO 127.0.0.1:39794 has connected
+2017-03-12 23:13:16,709,709 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:13:16,712,712 root INFO test.jpg has been sent from the server
+2017-03-12 23:15:07,955,955 root INFO 127.0.0.1:39796 has connected
+2017-03-12 23:15:07,956,956 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:15:07,994,994 root INFO test.jpg has been sent from the server
+2017-03-12 23:22:17,490,490 root INFO Crypto File Transfer Server Log
+2017-03-12 23:22:24,766,766 root INFO 127.0.0.1:39798 has connected
+2017-03-12 23:22:24,767,767 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:22:24,770,770 root INFO test.jpg has been sent from the server
+2017-03-12 23:22:30,614,614 root INFO 127.0.0.1:39800 has connected
+2017-03-12 23:22:30,615,615 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:22:30,620,620 root INFO test.jpg has been sent from the server
+2017-03-12 23:22:42,326,326 root INFO Crypto File Transfer Server Log
+2017-03-12 23:22:50,318,318 root INFO 127.0.0.1:39802 has connected
+2017-03-12 23:22:50,320,320 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:22:50,326,326 root INFO test.jpg has been sent from the server
+2017-03-12 23:23:07,437,437 root INFO Crypto File Transfer Server Log
+2017-03-12 23:23:11,549,549 root INFO 127.0.0.1:39804 has connected
+2017-03-12 23:23:11,550,550 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:23:11,554,554 root INFO test.jpg has been sent from the server
+2017-03-12 23:24:04,142,142 root INFO Crypto File Transfer Server Log
+2017-03-12 23:24:07,235,235 root INFO 127.0.0.1:39806 has connected
+2017-03-12 23:24:07,243,243 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:24:07,265,265 root INFO test.jpg has been sent from the server
+2017-03-12 23:24:46,683,683 root INFO Crypto File Transfer Server Log
+2017-03-12 23:24:49,809,809 root INFO 127.0.0.1:39808 has connected
+2017-03-12 23:24:49,810,810 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:24:49,835,835 root INFO test.jpg has been sent from the server
+2017-03-12 23:25:18,513,513 root INFO 127.0.0.1:39810 has connected
+2017-03-12 23:25:18,515,515 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:25:18,574,574 root INFO test.jpg has been sent from the server
+2017-03-12 23:31:19,495,495 root INFO 127.0.0.1:39812 has connected
+2017-03-12 23:31:19,497,497 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:31:19,558,558 root INFO test.jpg has been sent from the server
+2017-03-12 23:31:55,439,439 root INFO 127.0.0.1:39814 has connected
+2017-03-12 23:31:55,477,477 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:31:55,529,529 root INFO test.jpg has been sent from the server
+2017-03-12 23:32:14,517,517 root INFO 127.0.0.1:39816 has connected
+2017-03-12 23:32:14,524,524 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:32:14,572,572 root INFO test.jpg has been sent from the server
+2017-03-12 23:33:08,049,49 root INFO 127.0.0.1:39818 has connected
+2017-03-12 23:33:08,059,59 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:33:08,122,122 root INFO test.jpg has been sent from the server
+2017-03-12 23:33:28,875,875 root INFO 127.0.0.1:39820 has connected
+2017-03-12 23:33:28,897,897 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:33:28,984,984 root INFO test.jpg has been sent from the server
+2017-03-12 23:33:42,585,585 root INFO 127.0.0.1:39822 has connected
+2017-03-12 23:33:42,617,617 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:33:42,687,687 root INFO test.jpg has been sent from the server
+2017-03-12 23:34:12,373,373 root INFO 127.0.0.1:39824 has connected
+2017-03-12 23:34:12,376,376 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:34:12,418,418 root INFO test.jpg has been sent from the server
+2017-03-12 23:34:48,507,507 root INFO 127.0.0.1:39826 has connected
+2017-03-12 23:34:48,530,530 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:34:48,734,734 root INFO test.jpg has been sent from the server
+2017-03-12 23:35:11,599,599 root INFO Crypto File Transfer Server Log
+2017-03-12 23:35:14,203,203 root INFO 127.0.0.1:39828 has connected
+2017-03-12 23:35:14,204,204 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:35:14,222,222 root INFO test.jpg has been sent from the server
+2017-03-12 23:41:16,390,390 root INFO Crypto File Transfer Server Log
+2017-03-12 23:41:30,116,116 root INFO 127.0.0.1:39838 has connected
+2017-03-12 23:41:30,117,117 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:41:30,119,119 root INFO test.jpg has been sent from the server
+2017-03-12 23:44:14,063,63 root INFO 127.0.0.1:39844 has connected
+2017-03-12 23:44:14,064,64 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:44:14,106,106 root INFO test.jpg has been sent from the server
+2017-03-12 23:44:25,161,161 root INFO Crypto File Transfer Server Log
+2017-03-12 23:44:49,277,277 root INFO 127.0.0.1:39846 has connected
+2017-03-12 23:44:49,278,278 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:44:49,295,295 root INFO test.jpg has been sent from the server
+2017-03-12 23:44:58,251,251 root INFO 127.0.0.1:39848 has connected
+2017-03-12 23:44:58,252,252 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:44:58,259,259 root INFO test.jpg has been sent from the server
+2017-03-12 23:45:06,234,234 root INFO 127.0.0.1:39850 has connected
+2017-03-12 23:45:06,244,244 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:45:06,270,270 root INFO test.jpg has been sent from the server
+2017-03-12 23:45:25,908,908 root INFO Crypto File Transfer Server Log
+2017-03-12 23:45:33,210,210 root INFO 127.0.0.1:39852 has connected
+2017-03-12 23:45:33,211,211 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:45:33,213,213 root INFO test.jpg has been sent from the server
+2017-03-12 23:46:07,111,111 root INFO 127.0.0.1:39854 has connected
+2017-03-12 23:46:07,113,113 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:46:07,173,173 root INFO test.jpg has been sent from the server
+2017-03-12 23:46:11,441,441 root INFO Crypto File Transfer Server Log
+2017-03-12 23:47:37,561,561 root INFO Crypto File Transfer Server Log
+2017-03-12 23:47:53,429,429 root INFO 127.0.0.1:39856 has connected
+2017-03-12 23:47:53,590,590 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 23:47:53,594,594 root INFO test.jpg has been uploaded to the server
+2017-03-12 23:48:24,615,615 root INFO Crypto File Transfer Server Log
+2017-03-12 23:48:27,549,549 root INFO 127.0.0.1:39860 has connected
+2017-03-12 23:48:27,709,709 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 23:48:35,002,2 root INFO Crypto File Transfer Server Log
+2017-03-12 23:48:36,991,991 root INFO 127.0.0.1:39862 has connected
+2017-03-12 23:48:37,139,139 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 23:48:37,143,143 root INFO test.jpg has been uploaded to the server
+2017-03-12 23:49:23,489,489 root INFO Crypto File Transfer Server Log
+2017-03-12 23:49:37,195,195 root INFO 127.0.0.1:39864 has connected
+2017-03-12 23:49:37,382,382 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 23:49:37,386,386 root INFO test.jpg has been uploaded to the server
+2017-03-12 23:53:06,287,287 root INFO 127.0.0.1:39866 has connected
+2017-03-12 23:53:06,503,503 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 23:53:06,507,507 root INFO test.jpg has been uploaded to the server
+2017-03-12 23:53:12,073,73 root INFO Crypto File Transfer Server Log
+2017-03-12 23:53:14,326,326 root INFO 127.0.0.1:39868 has connected
+2017-03-12 23:53:14,481,481 root INFO 127.0.0.1 is uploading a file without encryption
+2017-03-12 23:53:14,484,484 root INFO test.jpg has been uploaded to the server
+2017-03-12 23:54:11,012,12 root INFO Crypto File Transfer Server Log
+2017-03-12 23:54:26,614,614 root INFO 127.0.0.1:39870 has connected
+2017-03-12 23:54:26,615,615 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:54:26,621,621 root INFO test.jpg has been sent from the server
+2017-03-12 23:55:31,533,533 root INFO 127.0.0.1:39872 has connected
+2017-03-12 23:55:31,534,534 root INFO 127.0.0.1 is requesting a file without encryption
+2017-03-12 23:55:31,537,537 root INFO test.jpg has been sent from the server
